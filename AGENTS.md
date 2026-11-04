@@ -23,7 +23,7 @@ context/              product docs copied from the app repo (read-only reference
 2. **Relative URLs only**: the site is served from the custom domain `filemanagerultra.com` (set in `CNAME`), and may also be reached under `/FileManagerUltraSite/`.
 3. **Screenshots come from the real app**, never mockups. Use `tools/make_demo_data.py` for a deterministic fake home directory (no personal data in any image), capture under Xvfb, and provide dark and light variants.
 4. **Accessibility and speed**: alt text on every image, `<video>` with poster and captions/controls, `loading="lazy"` for below-the-fold images, WebP/optimised PNG, respect `prefers-color-scheme` and `prefers-reduced-motion`.
-5. **Don't invent features.** Claims must match `context/product-readme.md` and the app's `CHANGELOG.md`. Status is "beta" (first release 0.1.0); keep it in sync with the app says otherwise. Download links point to the GitHub Releases page.
+5. **Don't invent features.** Claims must match `context/product-readme.md` and the app's `CHANGELOG.md`. Status is "beta" (first release 0.1.0); keep it in sync with the app's README. Download links point to the GitHub Releases page.
 6. Product name comes from the app's brand (`FileManagerUltra`); keep it in one place in templates where practical.
 7. Never commit large raw recordings; commit only the final optimised video/screenshots.
 
