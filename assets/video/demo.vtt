@@ -1,0 +1,28 @@
+WEBVTT
+
+00:00.000 --> 00:01.600
+The app starts with a single workspace.
+
+00:01.600 --> 00:07.000
+Saved workspaces are listed under Workspace ▸ Open saved.
+
+00:07.000 --> 00:21.600
+Code: files, a Git diff preview and a terminal running a coding agent (opencode).
+
+00:21.600 --> 00:31.000
+Ops: a server log in the Preview pane next to its folder.
+
+00:31.000 --> 00:36.800
+Media: an image folder with an image preview.
+
+00:36.800 --> 00:54.400
+Each workspace is a tab with its own layout. Switch between them with one click.
+
+00:54.400 --> 01:10.000
+Change the layout of the current workspace, for example with a Markdown preview…
+
+01:10.000 --> 01:20.000
+…and choose Workspace ▸ Save Workspace to keep it.
+
+01:20.000 --> 01:30.400
+Saved workspaces stay in the Open saved list, also after restarting the app.
