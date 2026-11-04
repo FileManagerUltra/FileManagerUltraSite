@@ -4,7 +4,7 @@ Marketing/documentation website for **FileManagerUltra** (app repo: `FileManager
 
 ## Product in one paragraph
 
-A cross-platform (Linux, macOS, Windows) multi-pane file manager written in Rust with a native `eframe`/egui UI (no Electron, no webview). Unlimited split panes, local/SMB/SFTP behind one `Vfs`, drag & drop (Ctrl = copy, Shift = move), background jobs with progress/conflicts/cancel, trash with undo, terminal panes, rich Markdown/image/log previews, Git status and diff view, dark/light themes. Pre-alpha, MIT licensed. Product copy, feature list, install steps and architecture live in `context/` (snapshots copied from the app repo; refresh them when the product changes).
+A cross-platform (Linux, macOS, Windows) multi-pane file manager written in Rust with a native `eframe`/egui UI (no Electron, no webview). Unlimited split panes, local/SMB/SFTP behind one `Vfs`, drag & drop (Ctrl = copy, Shift = move), background jobs with progress/conflicts/cancel, trash with undo, terminal panes, rich Markdown/image/log previews, Git status and diff view, dark/light themes. Pre-alpha, Apache 2.0 licensed. Product copy, feature list, install steps and architecture live in `context/` (snapshots copied from the app repo; refresh them when the product changes).
 
 ## Layout
 
