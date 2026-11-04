@@ -20,7 +20,7 @@ context/              product docs copied from the app repo (read-only reference
 ## Rules
 
 1. **Plain static HTML/CSS** with minimal vanilla JS. No bundlers, no CDNs, no trackers, no external fonts (self-host or system fonts); the site must work offline from a checkout.
-2. **Relative URLs only**: the site is served from `/FileManagerUltraSite/` until a custom domain exists.
+2. **Relative URLs only**: the site is served from the custom domain `filemanagerultra.com` (set in `CNAME`), and may also be reached under `/FileManagerUltraSite/`.
 3. **Screenshots come from the real app**, never mockups. Use `tools/make_demo_data.py` for a deterministic fake home directory (no personal data in any image), capture under Xvfb, and provide dark and light variants.
 4. **Accessibility and speed**: alt text on every image, `<video>` with poster and captions/controls, `loading="lazy"` for below-the-fold images, WebP/optimised PNG, respect `prefers-color-scheme` and `prefers-reduced-motion`.
 5. **Don't invent features.** Claims must match `context/product-readme.md` and the app's `CHANGELOG.md`. Status stays "pre-alpha" until the app says otherwise. Download links point to the GitHub Releases page.
