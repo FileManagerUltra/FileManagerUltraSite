@@ -30,7 +30,7 @@ This document is the source of truth for the crate map, layering, data model, co
 These apply to every crate. They are checked in review and by CI (`cargo xtask layers`, `cargo clippy`).
 
 1. **Never crash.** Non-test code contains no `unwrap()`, `expect()`, `panic!`, `todo!`, `unimplemented!`, `unreachable!` — errors propagate as `FmError` with `?`. A malformed filename, a vanished file mid-copy, an unreachable SMB server, a full disk or a 0-byte write must produce a user-visible error, never a panic. Unimplemented backends return `FmError::Unsupported`.
-2. **No `unsafe` in our code.** `unsafe_code = "forbid"` workspace-wide. No FFI: the SMB backend is the pure-Rust `smb` crate.
+2. **No `unsafe` in our code.** `unsafe_code = "forbid"` workspace-wide. No FFI: the SMB backend is the pure-Rust `smb` crate. Exceptions: `fm-wayland` (two `unsafe` calls adopting winit's Wayland display; roadmap priority 1 to remove) and `fm-winout` (the Windows OLE drag source, `unsafe` confined to `ole.rs`).
 3. **Everything user-visible is a command.** New behaviour = a `CommandSpec` in `crates/engine/src/*_cmds.rs`, registered in `commands.rs`, with id, label, menu path, shortcut, params doc, `enabled` and `run`, plus tests. The UI never performs file operations directly.
 4. **The UI is thin.** `crates/ui` holds widgets and view state only. It reads `Session` state and dispatches commands; no `std::fs` calls, no job spawning.
 5. **The UI thread never blocks on I/O.** Every filesystem call runs on a worker (see §7). A 40 GiB copy across a slow SMB link must not drop a frame.
@@ -51,6 +51,7 @@ crates/
   fs-sftp      L0  SSH/SFTP backend (russh + russh-sftp, owns its tokio runtime)
   git          L0  read-only git status, blobs and the line/word diff model (gix + similar, no git binary)
   ops          L1  copy/move/delete/mkdir/rename pipelines: streaming, conflicts, progress
+  media        L1  shared audio decode, bounded PCM pipeline, clock and native output
   layout       L2  pane tree (recursive splits), per-pane history/bookmarks/selection
   engine       L3  Session, command registry, job scheduler, watchers, dir cache
   ui           L4  egui widgets: file tree, virtualized listing, pane chrome, dialogs
@@ -64,6 +65,95 @@ docs/  AGENTS.md  openspec/  log/devlog.md
 **Layering is enforced by `cargo xtask layers`.** A crate may depend only on equal-or-lower layers, and only through the workspace path dependencies declared in the root `Cargo.toml`. New crates must be registered in `xtask/src/layers.rs`. Nothing above L3 may contain filesystem logic; nothing below L4 may name an egui type.
 
 Dependency direction in one line: **`vfs` knows nothing, backends know `vfs`, `ops` knows backends only through `Vfs`, `engine` orchestrates, `ui` observes `engine`, `fm-app` wires them.**
+
+### Shared audio foundation (`add-media-pane`, in progress)
+
+`fm-media` (L1) decodes local audio with Symphonia on a dedicated worker and
+outputs through cpal's safe API. Native FFI inside cpal and ALSA development
+headers on Linux are an approved dependency exception; workspace code still
+forbids unsafe code. File probing and device initialization never run in a frame.
+The worker maps channels and resamples once with Rubato, then writes interleaved
+f32 PCM to a lock-free, bounded single-producer/single-consumer ring. Device
+callbacks neither allocate nor take locks: they apply preamp/volume/mute and a
+soft limiter, emit silence on underrun, and update a sample-driven clock.
+
+Preview audio metadata and bounded cover art are read on its existing job lane.
+Its `AudioState` owns a non-blocking `AudioPlayer` handle: selection changes,
+pane closure and workspace changes cancel playback. Audio is quiet by default;
+`preview.audio.*` commands and `prefs.set`'s `preview_audio_autoplay` setting drive
+the controls. Starting Preview audio or video pauses the other Preview players.
+Video autoplay remains on by default and can be disabled in Preferences.
+The Media and Preview panes share their transport widgets (icon buttons, seek bar,
+volume) in `fm-ui`'s `player_controls`; Preview shows them as a framed card above
+the cover art. The Media equalizer is a persistent window (not a menu) so choosing
+a preset never dismisses it.
+
+The Preview video coordinator owns both ffmpeg children off-thread: fixed-cadence
+RGBA frames and native-rate s16le PCM (converted to f32 before the same Rubato
+pipeline). Only two blocks per pipe, one pending block and one displayed frame
+are retained. It holds future frames and replaces late ones against the sink's
+sample clock, independently of UI polling; silent videos use a monotonic clock.
+Delayed soundtracks retain their leading silence, including after seeks. A
+missing output device produces a silent-video hint; failed or stalled decoders
+produce errors (10 s no-progress budget). Pause/seek/selection cancellation and
+child reaping run on the coordinator, never a rendering frame. Normal app exit
+cancels and awaits all current/replaced video workers with a bounded shutdown
+wait.
+
+Media audio extras live in `fm-media` (`eq.rs`, gapless hand-over in `player.rs`)
+and `engine/src/media_audio_cmds.rs`. The equalizer and fade run in the output
+callback through the shared `Gain` (so video soundtracks get them too); the player
+worker pre-opens the armed next item and continues on the same sink, reporting the
+change with `PlaybackStatus.token`, which the session turns into a queue advance.
+A-B loop and sleep timer are tick-driven session state.
+
+The session-owned `MediaSession` now plays local audio independently of Files
+selection, with a bounded `fm-media::Queue`, transport/queue commands, metadata,
+background cover-art decoding and a virtualized queue view. `AudioOwner` pauses
+Media when Preview audio/video starts and vice versa; a late completion from a
+paused owner cannot restart it. Finished items auto-advance through shuffle/repeat;
+failed items bypass repeat-one and stop after one wholly failed queue cycle.
+Closing the pane retains the queue and, by default, audio playback, with a
+status-bar Stop control. `media_background_audio` disables that behavior.
+The local audio queue, current index, volume, shuffle and repeat are restored
+paused from bounded owner-only state. File validation and atomic saves use the
+local job lane; startup edits take precedence over a delayed restore, and missing
+items are skipped with a notice. Unsupported remote entries are not persisted.
+`media_spool` downloads remote (SFTP/SMB) items through their job lane into the
+owner-only temp folder (at most 3 kept, size cap, progress, cancel, cleanup) before
+playback; remote items are never persisted. `media_track_cmds` selects audio and
+subtitle tracks; `media_fullscreen_cmds` owns pane fullscreen (layout untouched) and
+the independent `window.fullscreen` flag, which `fm-app` forwards to the viewport
+without overwriting saved geometry. `fm-ui::media_keys` maps bare keys to commands.
+`media_playlist_cmds` loads bounded local M3U/M3U8/PLS on the local lane, reporting
+skipped URLs, missing items and unsupported media without exposing credentials.
+Imports append without starting playback; export snapshots the queue to a new
+owner-only M3U8 through an atomic no-clobber temporary file.
+`media_source_cmds` expands local folder children in natural name order without
+recursion. Media drops enqueue in payload order, never copy/move files, and start
+the first new item when idle. Delayed imports refuse to replace concurrent queue
+edits; command and input caps also bound folder scans and queue growth.
+`media_entry_cmds` resolves Files selections or explicit Preview panes for local
+audio/video actions. Add appends; Play next inserts after current with priority over
+shuffle/history/repeat-one; Play inserts there and starts immediately. Queue
+edits remap playback/history/pending and UI selection indices, retaining all
+existing items until explicit removal. Preview Play transfers its position and
+stops its decoder; Add/Play next leave playback unchanged. Folder context actions
+retain their explicit target; Preview Play folder uses the media file's parent.
+Media video reuses `VideoState` and the shared ffmpeg player/clock. Cancellable
+ffprobe jobs on the local lane load metadata without decoding a poster; dropping
+a pending request cancels its probe and discards stale results. A shared texture
+helper retains just the latest displayed frame per view. Fit commands bucket
+decode sizes; paused frame steps decode one still without opening audio output.
+The existing transport, gain, ownership and bounded error/auto-advance paths
+serve both media types. Closing/switching the pane or changing to a workspace
+without Media cancels video regardless of the background-audio preference.
+`media.speed` adjusts video playback from 0.5× to 3× in 0.05× steps. The shared
+player applies ffmpeg's pitch-preserving `atempo` chain to the soundtrack and
+scales frame deadlines and reported position against its output clock; silent
+video uses the same speed-scaled monotonic clock. Audio-only speed, track
+selection, fullscreen, YouTube-style shortcuts and advanced playback remain in
+the change's task list.
 
 ---
 
@@ -302,8 +392,10 @@ UI thread (eframe)                 engine workers                backends
 - **File jobs (landed, change 3):** `engine::fileops` holds a jobs table (`OpJob { id, label, state, progress, conflict, summary }`). `Session::submit_op(OpRequest)` queues a copy/move/trash/delete/mkdir/rename/undo job on the source's lane; the worker throttles progress (30 ms) into shared state and `poll()` copies it into the table — the UI never waits. Cancel is an `Arc<AtomicBool>` checked between chunks.
 - **Conflicts** are resolved *during* the job: the worker parks on a decision channel and the UI shows the dialog from `FileOps::pending_conflict()`, answering with `job.resolve_conflict {job, choice, apply_to_all?}`. Cancel (or a dropped channel) resolves as Cancel, so a parked worker is never leaked.
 - **Undo/trash:** delete (F8) moves local entries to the platform trash and records an `UndoRecord` (created / moved / trashed / renamed); `edit.undo` replays it with an actionable error when stale. Remote URIs never fall back to a permanent delete; `file.delete_permanent` needs `confirm: true`. macOS cannot restore from trash (documented).
-- **UI contract:** dialogs and the jobs panel (`fm-ui::dialogs`, `fm-ui::jobs`) only dispatch command ids; dispatch failures surface as `Session::notice` in the status bar.
+- **UI contract:** dialogs and the jobs panel (`fm-ui::dialogs`, `fm-ui::jobs`) only dispatch command ids; dispatch failures set `Session::notice`, which `fm-ui::jobs::show` moves into the bounded `Session::messages` log (`engine::messages`, command `messages.clear`). A new message opens the jobs panel for 5 seconds (kept open while hovered); the status-bar icon (`jobs::icon_button`) reopens it. Short confirmations still use `Session::info` in the status bar.
 - **Thumbnails (`thumbnails-and-open`):** `engine::thumbs::ThumbService` owns its own pool (≤ 4 workers, *not* a job lane — a folder of images must not queue behind file copies) and a per-pane generation counter. The grid reports the visible window (`preview.thumbs.visible`); the engine queues visible entries, then one screenful after and one before, and drops results whose generation is stale. Decoded RGBA lives in a 192 MiB LRU; PNGs go to `<cache>/thumbs` (cache parent configurable via `thumb_cache_dir`; 256 MiB default cap, configurable; `0600`/`0700`, temp + rename). Only `file://` entries are thumbnailed.
+- **Markdown images (`markdown-images`):** `engine::md_images::MdImageService` has two small pools (local, net; 2 workers each, not job lanes) and a 256 MiB / 256-entry LRU keyed by (document, mtime, url). The Markdown preview reports the image URLs it needs (`preview.md_images.want`); relative paths resolve like `preview.open_link` and load through the document's `Vfs`. Remote http(s) loads only with `preview_remote_images` and uses a DNS guard that refuses non-public addresses, ≤ 3 revalidated redirects, a 10 s timeout and an 8 MiB cap. SVG is rasterized by `fm-preview::svg` (resvg, no text, no external resources).
+- **Markdown HTML subset (`markdown-html-subset`):** `fm-preview::markdown::html` is a tolerant tokenizer/builder (allow-listed tags and attributes, 256 KiB per block, depth 32, `script`/`style` dropped) that lowers HTML blocks and inline HTML into the normal model: `MdBlock::Centered`, `MdImage.dark_url`/`width`, headerless `Table`s. `<picture>` keeps both URLs; the UI picks `url_for(tokens.dark)`, so only the visible image is requested.
 
 - **Walkers outside the lanes:** Properties folder sizes (`props_cmds`, thread `fm-props`), Find Files (`search_cmds`, `fm-search`) and the Open With application scan (`openwith_cmds`, `fm-apps`) run on their own short-lived threads so a long walk never queues behind file jobs. Each publishes into a `Mutex` the UI reads every frame and stops on an `AtomicBool` set by its owner's `Drop` (closing the window cancels the walk). Walks never follow symlinks, are capped (5 M entries / depth 256 for sizes; 10 k results, depth 64 and 64 MiB read per file for search) and skip SMB, which must stay on its lane.
 
@@ -355,7 +447,7 @@ and individual watches retry with exponential backoff from 1 second to a
 leaving a folder drops its retry. Known network folders remain polling-only,
 and folders over the watch cap are reconsidered when capacity is freed.
 
-`DirCache::invalidate(uri)` (revision bump) is the only mutation path — the cache is invalidated, never patched. `engine::watch::Watcher` (the `notify` crate: inotify / FSEvents / `ReadDirectoryChangesW`) holds one non-recursive watch per *visible* local folder (reconciled every `Session::poll` from the active tab's Files panes, so shared folders share one watch and hidden tabs hold none). The OS callback queues nothing: it only marks an already-watched folder dirty in a set bounded by `MAX_WATCHES` (64) and wakes the UI, so event floods cost no memory. `drain` debounces (100 ms) and the session re-reads through `poll_location` on the `local` lane, swapping entries in without a loading blank; selection prunes by name. Backend errors/overflow mark every watch dirty. A vanished folder shows the read error. Folders on network filesystems/UNC paths, over the watch cap, or whose watch fails fall back to a 2 s poll; remotes keep focus-regain + the 5 s poll. The OS watcher is created lazily on first use.
+`DirCache::invalidate(uri)` (revision bump) is the only mutation path — the cache is invalidated, never patched. `engine::watch::Watcher` (the `notify` crate: inotify / FSEvents / `ReadDirectoryChangesW`) holds one non-recursive watch per *visible* local folder (reconciled every `Session::poll` from the active tab's Files panes and their expanded tree nodes, pane folders first so the cap never starves a listing; shared folders share one watch and hidden tabs hold none). The OS callback queues nothing: it only marks an already-watched folder dirty in a set bounded by `MAX_WATCHES` (64) and wakes the UI, so event floods cost no memory. `drain` debounces (100 ms) and the session re-reads through `poll_location` on the `local` lane, swapping entries in without a loading blank; selection prunes by name. Backend errors/overflow mark every watch dirty. A vanished folder shows the read error. Folders on network filesystems/UNC paths, over the watch cap, or whose watch fails fall back to a 2 s poll; remotes keep focus-regain + the 5 s poll. The OS watcher is created lazily on first use.
 
 ---
 
@@ -387,7 +479,14 @@ and folders over the watch cap are reconsidered when capacity is freed.
 
 Guards enforced by `ops` regardless of UI: never drop a directory into itself or a descendant; never overwrite without an explicit conflict decision; never copy a file onto itself (same uri) — silently ignored.
 
+**Drag out** (files to other apps): `fm-dragout` (L0) is a pure-Rust XDND v5 source over `x11rb`. `fm-app/src/dragout.rs` watches an in-app drag; when the pointer leaves the window it starts an OS drag carrying the payload as `text/uri-list` (RFC 2483, capped). The source polls the real pointer, finds the `XdndAware` window under it, and drops on release. Under Xwayland, owning `XdndSelection` while the button is held makes the compositor take over the drag (button state then reads "up"), so the selection is claimed only just before the drop and the target is re-entered so it reads the offered types. Wayland-native sessions use `fm-wayland`. On Windows `fm-winout` (L0, `windows` crate) runs `DoDragDrop` on the UI thread (OLE reads the button state and takes the mouse capture from the calling thread; a helper thread saw the button as released and ended the drag at once) with a minimal data object offering only `CF_HDROP` (a shell data object also advertised other formats and Chrome's image-search drop then lost the files' types) and an `IDropSource` that ends on button release or Escape; the call blocks until then and the capture is released afterwards. Paths are validated in safe code (`paths.rs`: absolute, no NUL, count cap, `\\?\` prefixes stripped); only `ole.rs` uses `unsafe`. The source never reads, copies or deletes the files; a receiver that moves them does so itself. macOS is not covered.
+
 **External drops** (files from the OS): `ViewportBuilder::with_drag_and_drop(true)`, `ctx.input(|i| i.raw.dropped_files)`; the pane under the pointer (`dnd::pane_at`, focused pane as fallback) becomes the destination and the paths go through `dnd.drop` with `origin: external` (always copy; bad paths are rejected individually and counted); payloads are native paths → imported through `ops` (copy in v1; move when the source is an app that reports a move intent).
+
+**Media drops:** internal and external paths dropped onto Media dispatch
+`media.drop` instead of `dnd.drop`; modifiers never copy, move or delete files.
+The hover badge says "Add to media queue"; validation and folder expansion run
+off-thread. Remote media remains unsupported until the spool slice.
 
 **Visual feedback:** hovered target gets an accent outline + badge (`Copy 12 items` / `Move 3 items`) with the resolved action from the modifier table; invalid targets use `CursorIcon::NoDrop`.
 
