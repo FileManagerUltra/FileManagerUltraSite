@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Install – FileManagerUltra</title>
+  <meta name="description" content="Install FileManagerUltra on Windows, macOS or Linux, or build it from source. Notes on ffmpeg for video, and the project status.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/theme.js" defer></script>
+  <script src="assets/lightbox.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="32" height="32"><span>FileManagerUltra</span></a>
+      <nav aria-label="Main">
+        <a href="features.html">Features</a>
+        <a href="features.html#media">Media</a>
+        <a href="install.html" aria-current="page">Install</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra">GitHub</a>
+      </nav>
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-mode="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-mode="light" aria-pressed="false">Light</button>
+        <button type="button" data-mode="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="install">
+      <div class="wrap">
+        <h1>Install</h1>
+        <p class="sub">Installers are attached to each <a href="https://github.com/FileManagerUltra/FileManagerUltra/releases">GitHub Release</a>. Each download is a zip: unzip it first. The installers are not signed, so your OS warns on first start.</p>
+        <div class="platforms">
+          <div class="card">
+            <h3>Windows (x64)</h3>
+            <ol>
+              <li>Run the <code>*-setup.exe</code>.</li>
+              <li>If SmartScreen appears, choose <strong>More info → Run anyway</strong>.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>macOS (Apple silicon)</h3>
+            <ol>
+              <li>Clear the quarantine flag, open the <code>.dmg</code> and drag the app to Applications.</li>
+              <li>On first start, right-click the app and choose <strong>Open</strong>.</li>
+            </ol>
+            <pre><code>xattr -d com.apple.quarantine ~/Downloads/FileManagerUltra_*.dmg</code></pre>
+          </div>
+          <div class="card">
+            <h3>Linux (x64)</h3>
+            <p>Debian / Ubuntu:</p>
+            <pre><code>sudo apt install ./filemanagerultra_*.deb</code></pre>
+            <p>Any distro (needs FUSE 2):</p>
+            <pre><code>chmod +x filemanagerultra_*.AppImage
+./filemanagerultra_*.AppImage</code></pre>
+          </div>
+          <div class="card" id="source">
+            <h3>From source</h3>
+            <p>With the Rust toolchain installed:</p>
+            <pre><code>cargo build --release --locked -p fm-app
+./target/release/filemanagerultra</code></pre>
+          </div>
+        </div>
+        <p class="note">The app checks GitHub Releases for newer versions at startup. This can be turned off in Preferences, and updating is always manual. See the <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/docs/install.md">full install guide</a>.</p>
+      </div>
+    </section>
+
+    <section id="ffmpeg" class="alt">
+      <div class="wrap">
+        <h2>Video and ffmpeg <span class="tag">Next release</span></h2>
+        <p class="sub">The Media pane and video previews use ffmpeg for video, chapters and poster frames, and for audio formats the built-in decoder can't read. Plain audio such as MP3 and FLAC plays without it. ffmpeg is not bundled; a copy already on your computer is always used first.</p>
+        <div class="platforms">
+          <div class="card">
+            <h3>Windows</h3>
+            <p>Open Preferences ▸ Media and download ffmpeg there, or accept the offer when a video can't play. The download is a pinned version, checked against a built-in SHA-256 checksum before it is installed.</p>
+          </div>
+          <div class="card">
+            <h3>Linux and macOS</h3>
+            <p>Install ffmpeg with your package manager. Preferences ▸ Media shows whether it was found.</p>
+            <p>Debian / Ubuntu:</p>
+            <pre><code>sudo apt install ffmpeg</code></pre>
+            <p>macOS (Homebrew):</p>
+            <pre><code>brew install ffmpeg</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="status">
+      <div class="wrap">
+        <h2>Status</h2>
+        <p class="sub">FileManagerUltra is in <strong>beta</strong> (latest release 0.1.3): core features work, but expect rough edges and changes between releases. Features marked <em>Next release</em> are on <code>main</code> and not in a release yet. Work is planned and tracked with OpenSpec. Follow along, report issues or contribute on GitHub.</p>
+        <div class="cta" style="justify-content:flex-start">
+          <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/releases">Releases</a>
+          <a class="btn secondary" href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
+          <a class="btn secondary" href="https://github.com/FileManagerUltra/FileManagerUltra/issues">Report an issue</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>FileManagerUltra is open source under the <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/LICENSE">Apache License 2.0</a>.</span>
+      <span><a href="https://github.com/FileManagerUltra/FileManagerUltra">App repository</a> · <a href="https://github.com/FileManagerUltra/FileManagerUltraSite">Site repository</a></span>
+    </div>
+  </footer>
+</body>
+</html>

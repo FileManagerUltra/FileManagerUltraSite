@@ -397,7 +397,7 @@ UI thread (eframe)                 engine workers                backends
 - **Markdown images (`markdown-images`):** `engine::md_images::MdImageService` has two small pools (local, net; 2 workers each, not job lanes) and a 256 MiB / 256-entry LRU keyed by (document, mtime, url). The Markdown preview reports the image URLs it needs (`preview.md_images.want`); relative paths resolve like `preview.open_link` and load through the document's `Vfs`. Remote http(s) loads only with `preview_remote_images` and uses a DNS guard that refuses non-public addresses, ≤ 3 revalidated redirects, a 10 s timeout and an 8 MiB cap. SVG is rasterized by `fm-preview::svg` (resvg, no text, no external resources).
 - **Markdown HTML subset (`markdown-html-subset`):** `fm-preview::markdown::html` is a tolerant tokenizer/builder (allow-listed tags and attributes, 256 KiB per block, depth 32, `script`/`style` dropped) that lowers HTML blocks and inline HTML into the normal model: `MdBlock::Centered`, `MdImage.dark_url`/`width`, headerless `Table`s. `<picture>` keeps both URLs; the UI picks `url_for(tokens.dark)`, so only the visible image is requested.
 
-- **Walkers outside the lanes:** Properties folder sizes (`props_cmds`, thread `fm-props`), Find Files (`search_cmds`, `fm-search`) and the Open With application scan (`openwith_cmds`, `fm-apps`) run on their own short-lived threads so a long walk never queues behind file jobs. Each publishes into a `Mutex` the UI reads every frame and stops on an `AtomicBool` set by its owner's `Drop` (closing the window cancels the walk). Walks never follow symlinks, are capped (5 M entries / depth 256 for sizes; 10 k results, depth 64 and 64 MiB read per file for search) and skip SMB, which must stay on its lane.
+- **Walkers outside the lanes:** Properties folder sizes (`props_cmds`, thread `fm-props`), Find Files (`search_cmds`, `fm-search`), the Open With application scan (`openwith_cmds`, `fm-apps`) and Media subtitle discovery/extraction (`media_subtitle_cmds`, `fm-subtitles`; extracting an embedded track reads the whole container) run on their own short-lived threads so a long walk never queues behind file jobs. Each publishes into a `Mutex` the UI reads every frame and stops on an `AtomicBool` set by its owner's `Drop` (closing the window cancels the walk). Walks never follow symlinks, are capped (5 M entries / depth 256 for sizes; 10 k results, depth 64 and 64 MiB read per file for search) and skip SMB, which must stay on its lane.
 
 ### Mounted devices and volumes
 
@@ -594,6 +594,19 @@ Dark mode is a v1 feature, not a later polish pass: **every widget is built agai
 Winit/egui have no Wayland-native **window-wide** file drop in some setups; external drops fall back to "paste from clipboard" (documented in `docs/development.md`), internal pane-to-pane DnD is unaffected (it never leaves the app).
 
 ---
+
+### Managed tools (`managed-ffmpeg`)
+
+`fm-engine::ffmpeg_install` can download ffmpeg/ffprobe on Windows (command
+`tools.ffmpeg.install`, Preferences > Media). Lookup order in `fm-preview` is
+`$PATH`/known locations first, then `<local data dir>/tools (`%LOCALAPPDATA%` on Windows)` (`set_managed_tools_dir`),
+so a system install always wins. Rules: a compiled-in `Pin` (https URL, exact
+size, SHA-256 cross-checked against the publisher); https-only with a redirect
+policy and size cap; the hash is verified before anything is unpacked; only the
+two named `bin/` members are extracted, to fixed names (no paths, symlinks or
+duplicates); temp files are persisted atomically and `manifest.json` is written
+last; the folder is owner-only on Unix. Updates arrive only with a new app
+release carrying a new pin. Linux and macOS have no pin (package manager hints).
 
 ## 12. Security and threat model
 

@@ -8,11 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Copy and move progress ("Copy 1 item to Videos · 44%") now sits at the right of the status bar, next to the jobs button.
+- Adding items to the Media playlist no longer starts playback on its own. Preferences > Media has "Start playing when items are added" (off by default) to bring it back; it never interrupts what is already playing. Opening a folder in Media still plays it.
+- When a video can't play because ffmpeg is missing, a dialog offers to download it, or explains how to install it yourself with a link to the download site.
+- The Windows installer no longer includes ffmpeg (about 90 MB smaller); download it from Preferences > Media when you want video.
+- Removed the Media menu from the menu bar; its commands remain in the Media pane, its context menus and keyboard shortcuts. Media settings (gapless, background playback, audiobook skips) now have their own topic in Preferences.
 
 - Preview's audio and video players now use the same icon controls, seek bar and volume as the Media pane. The player in Preview is a larger card shown above the cover art. The Media equalizer is redesigned and opens in its own window that stays open while you pick presets, and the right-click menu only shows audiobook entries where they apply.
 
 ### Added
-
+- Media and Preview play WMA audio, plus Opus, APE, WavPack, AIFF, AC-3, DTS, Matroska audio and other formats, using ffmpeg when the built-in decoder can't read them.
+- Media plays DVD disc images (`.iso`): the main film plays as one continuous video straight from the image, with no mounting or copying. Images that aren't DVD-Video (installers, data discs) are refused, and are skipped when you drop a folder.
+- Media plays DVD video (`.VOB`) as well as Blu-ray and camcorder `.m2ts`/`.mts` files. Dropping a DVD folder (or its `VIDEO_TS` folder) on the Media pane adds the film's parts in order as one playlist folder named after the disc, skipping the menu files. Copy-protected discs can't play.
+- The Media playlist selects rows like the Files panel: Shift+Up/Down (and Shift+Home/End/PageUp/PageDown) extend the selection, and Shift-click and Ctrl-click behave the same way. Delete and "Remove" act on all selected rows.
+- Subtitles in the Media pane and fullscreen: subtitle files next to the video (such as `movie.en.srt`) are found automatically, and embedded subtitle tracks, SRT, WebVTT and ASS/SSA files can be shown. Load another file from the Subtitles menu, and move subtitles earlier or later in 0.1 s steps with the menu or the G and H keys. After you pick a language, the next video uses it too.
+- Preferences > Media has a Subtitles section that sets how subtitles look, the same for every subtitle format: size, position, font, bold, text colour and opacity, a background box, outline or shadow, and letter and line spacing. Presets such as High contrast and Yellow on black are one click away, and a live preview shows the contrast ratio with a warning when text would be hard to read. Picture-based subtitles (Blu-ray, DVD) are not shown yet.
+- On Windows, Preferences > Media can download ffmpeg (needed for video) for you. The download is a pinned version that is checked against a built-in SHA-256 checksum before it is installed, and a copy already on your computer is always used first. Elsewhere the same place tells you how to install it.
+- While Media is playing (or paused mid-item), the bottom right of the status bar, next to the jobs button, shows Previous, Play/Pause and Next buttons and a speaker that pops out a vertical volume slider.
 - Media playlist rows with a remembered position show a small half-filled dot in the gutter ("Resumes at 12:34" on hover), and finished books show a check mark.
 - Media remembers where the current item stopped when you close the app: after reopening, the player shows that position and length, and Play continues from there.
 - Audiobooks in Media: `.m4b` files, files tagged "Audiobook", and folders or files you mark ("Treat as audiobook" in the right-click menu) get Back/Forward skip buttons (15 s / 30 s, adjustable in Preferences), previous/next chapter, a chapter list, bookmarks, and a seek bar and progress percentage that span the whole book, even across many files. Playing a book or video again continues where you stopped (rewound a few seconds); a book counts as finished near its end and then starts over. Mark books finished or unfinished from the menu, and clear everything remembered from Preferences.
@@ -25,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lock a Media playlist folder (right-click its header) so nothing can be dropped in or taken out by accident; a padlock marks it. Folders from added directories, such as audiobooks, start locked. Locked folders can still be moved, renamed, played and deleted.
 - In the Media playlist, drag a row or a whole folder onto a row to place it right after that row (the top of the first row puts it at the very top, the bottom of a folder's last row puts it after the folder), onto the top of a folder name to place it before the folder, or onto the folder name to make it the folder's first item (a collapsed folder's lower part places it after the folder), and select several rows (Ctrl/Shift-click) to remove them with the menu or the Delete key.
 - Folders added to Media (such as an audiobook) are grouped under a collapsible folder header, and adding that folder again, or double-clicking its header (or choosing "Resume play"), continues at the file and position where you left off.
-- Play local audio in a dedicated Media pane with a queue, seeking, volume, mute, shuffle and repeat. Audio can keep playing after the pane closes, with a Stop control in the status bar; starting Preview playback pauses it.
+- Play local audio in a dedicated Media pane with a queue, seeking, volume, mute, shuffle and repeat. Audio can keep playing after the pane closes,; starting Preview playback pauses it.
 - The Media queue and playback settings now return paused after restarting; missing files are skipped with a notice.
 - Import local M3U, M3U8 and PLS playlists, or save the queue as a new M3U8 file. Unsafe links, missing files and unsupported entries are skipped with notices.
 - Drop local audio files or folders onto Media to queue them without copying or moving files. Folders play in natural filename order; idle drops start playback.
@@ -49,7 +61,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redesigned the Media pane in a Winamp style: a now-playing display with artwork, title and clock, an icon-based control row with tooltips, a numbered playlist, and an Options menu holding the equalizer, sleep timer, A-B loop, speed, tracks, gapless and other settings.
 
 ### Fixed
+- Shift+Arrow keyboard selection keeps its starting row instead of sliding after two files.
+- Audio no longer stops with "buffer underrun or overrun" errors; brief glitches are tolerated.
+- Media keyboard controls keep working after clicking a button in the pane.
+- Videos keep playing when you switch workspace or close the Media pane (when background playback is on), like audio.
+- Widescreen videos stored with non-square pixels (many DVD and broadcast files) are no longer squeezed to 4:3 in Preview and Media.
 
+- The Windows installer now includes ffmpeg and ffprobe, so video (and Preview video) works without installing anything else.
 - In a Media audiobook folder, the files before the one you are on now show a check mark ("Played") in the gutter.
 - Folders of mp3 audiobooks are now recognised as books (and get resume markers, chapters and skip buttons) when they sit under a folder called "Audio Books" or most files are named "Chapter…"/"Part…"; use "Treat as audiobook" for any other folder.
 - Resuming an audiobook or track no longer flashes back to 0:00 (and no longer overwrites the remembered position), and an audiobook's clock now shows the time in the whole book, matching the seek bar.

@@ -8,6 +8,15 @@
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
+  <script>
+    // Sections that moved off this page when the site was split up: keep old links working.
+    (function () {
+      var moved = { screenshots: "features.html#previews", accents: "features.html#accents", ai: "features.html#ai",
+                    remote: "features.html#remote", install: "install.html", status: "install.html#status" };
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
   <script src="assets/theme.js" defer></script>
   <script src="assets/lightbox.js" defer></script>
 </head>
@@ -16,15 +25,12 @@
 
   <header class="site">
     <div class="wrap">
-      <a class="brand" href="#top"><img src="assets/logo.svg" alt="" width="32" height="32"><span>FileManagerUltra</span></a>
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="32" height="32"><span>FileManagerUltra</span></a>
       <nav aria-label="Main">
-        <a href="#features">Features</a>
-        <a href="#demo">Demo</a>
-        <a href="#screenshots">Screenshots</a>
-        <a href="#ai">AI workflow</a>
-        <a href="#remote">Remote</a>
-        <a href="#install">Install</a>
-        <a href="#status">Status</a>
+        <a href="features.html">Features</a>
+        <a href="features.html#media">Media</a>
+        <a href="install.html">Install</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
         <a href="https://github.com/FileManagerUltra/FileManagerUltra">GitHub</a>
       </nav>
       <div class="theme-toggle" role="group" aria-label="Theme">
@@ -75,203 +81,49 @@
         <p class="sub">Commander-style speed with a modern, native interface.</p>
         <div class="grid">
           <div class="card"><h3>Unlimited split panes</h3><p>Split right or down as often as you like. Each pane has its own file tree and file listing.</p></div>
-          <div class="card"><h3>Local, SMB and SFTP</h3><p>Local drives, mounted shares, in-app SMB and SSH/SFTP all behind one virtual filesystem, so every pane feature works across them.</p></div>
-          <div class="card"><h3>Drag &amp; drop between panes</h3><p>Drop onto a tree node or the listing. Hold Ctrl to copy, Shift to move.</p></div>
+          <div class="card"><h3>Local, SMB and SFTP</h3><p>Local drives, mounted shares, in-app SMB and SSH/SFTP all behind one virtual filesystem, so every pane feature works across them. <a href="features.html#remote">See remote panes</a></p></div>
+          <div class="card"><h3>Drag &amp; drop</h3><p>Drop onto a tree node or the listing; hold Ctrl to copy, Shift to move. On Linux and Windows, drag files out into a browser upload field, mail or chat window.</p></div>
           <div class="card"><h3>Background jobs</h3><p>File operations run as jobs with progress, conflict handling and cancel, so the UI never blocks.</p></div>
           <div class="card"><h3>Trash with undo</h3><p>Deleted items go to the trash and can be restored with undo. Directory listings update live.</p></div>
           <div class="card"><h3>Workspaces</h3><p>Keep different layouts for different workflows in tabs, save them, and open them again later. Up to 10 workspaces persist.</p></div>
           <div class="card"><h3>Commander shortcuts</h3><p>F5–F8 for copy, move, new folder and delete; Tab swaps panes. Everything is a command.</p></div>
-          <div class="card"><h3>Terminal panes</h3><p>Application mouse support (mc, btop), resize reflow, multi-screen selection and 5,000–1,000,000 rows of scrollback.</p></div>
-          <div class="card"><h3>Media pane</h3><p>Play audio and video from local drives, SFTP and SMB with a queue, playlist folders, gapless playback, a ten-band equalizer, A-B loop, sleep timer and YouTube-style keys. Import and export M3U/M3U8/PLS playlists.</p></div>
-          <div class="card"><h3>Audiobooks</h3><p>Chapters, skip back/forward, bookmarks and a seek bar that spans a whole book, even across many files. Media remembers where you stopped, marks played and finished books, and resumes after a restart.</p></div>
-          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks and syntax-highlighted code; images with thumbnails; logs with filters and live tail.</p></div>
+          <div class="card"><h3>Terminal panes</h3><p>Application mouse support (mc, btop), resize reflow, multi-screen selection and 5,000–1,000,000 rows of scrollback. <a href="features.html#ai">See terminals and AI agents</a></p></div>
+          <div class="card"><h3>Media pane <span class="tag">Next release</span></h3><p>Audio and video from local drives, SFTP and SMB with a queue, playlist folders, gapless playback, a ten-band equalizer, subtitles and DVD images. <a href="features.html#media">See Media</a></p></div>
+          <div class="card"><h3>Audiobooks <span class="tag">Next release</span></h3><p>Chapters, skip back/forward, bookmarks and a seek bar that spans a whole book, even across many files. Media remembers where you stopped.</p></div>
+          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks, images and syntax-highlighted code; images with thumbnails; logs with filters and live tail. <a href="features.html#previews">See previews</a></p></div>
           <div class="card"><h3>Git aware</h3><p>Status in listings and tree, plus a diff view against HEAD or any branch or tag. Read-only, pure-Rust <code>gix</code>.</p></div>
-          <div class="card"><h3>Dark and light themes</h3><p>Switch themes with Ctrl+Shift+T. Local file times use your operating system's timezone.</p></div>
+          <div class="card"><h3>Dark and light themes</h3><p>Switch themes with Ctrl+Shift+T and pick an accent colour. Local file times use your operating system's timezone. <a href="features.html#accents">See themes</a></p></div>
         </div>
+        <div class="cta more"><a class="btn secondary" href="features.html">See all features</a></div>
       </div>
     </section>
 
-    <section id="screenshots">
+    <section id="media-teaser" class="alt">
       <div class="wrap">
-        <h2>See it in action</h2>
-        <p class="sub">Screenshots come straight from the app. Most match the page theme, and a few show the other one, so you see both. The Auto / Light / Dark switch at the top changes the page and its screenshots; click any screenshot to enlarge it.</p>
-        <div class="showcase">
-          <div class="feature">
-            <div class="text">
-              <h3>Git diff in the Preview pane</h3>
-              <p>Modified files open as a side-by-side diff against HEAD or any branch or tag, with word highlights and F7 / Shift+F7 to jump between changes.</p>
-              <p>Status letters and tinted names show what changed in the listing and the tree.</p>
-            </div>
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screens/diff-light.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/diff-dark.webp" width="1440" height="900" loading="lazy" alt="A source folder with Git status markers next to a side-by-side diff of main.rs against HEAD.">
-              </picture>
-            </figure>
-          </div>
-          <div class="feature">
-            <div class="text">
-              <h3>Markdown that reads like a document</h3>
-              <p>Nested lists, task lists, aligned tables and code blocks with per-block copy buttons. Zoom a preview from 50% to 400% and search with Ctrl+F.</p>
-            </div>
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screens/markdown-dark.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/markdown-light.webp" width="1440" height="900" loading="lazy" alt="A documents folder next to a rendered Markdown trip plan with a checklist, a budget table and a code block.">
-              </picture>
-            </figure>
-          </div>
-          <div class="feature">
-            <div class="text">
-              <h3>Images and thumbnails</h3>
-              <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder.</p>
-            </div>
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screens/thumbs-light.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/thumbs-dark.webp" width="1440" height="900" loading="lazy" alt="A pictures folder listing next to a preview pane showing a grid of image thumbnails.">
-              </picture>
-            </figure>
-          </div>
-          <div class="feature">
-            <div class="text">
-              <h3>Log previews with live tail</h3>
-              <p>Severity filters, search and UTC time ranges from five minutes to seven days, or custom dates and times.</p>
-            </div>
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screens/log-dark.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/log-light.webp" width="1440" height="900" loading="lazy" alt="A server log previewed with colour-coded INFO, WARN and ERROR lines and a filter toolbar.">
-              </picture>
-            </figure>
-          </div>
-          <div class="feature">
-            <div class="text">
-              <h3>Terminals are just panes</h3>
-              <p>Put a terminal beside your files. Hold Shift for local selection and scrolling when an application captures the mouse.</p>
-            </div>
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screens/terminal-light.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/terminal-dark.webp" width="1440" height="900" loading="lazy" alt="A terminal pane running git commands above a file listing, next to a Markdown preview.">
-              </picture>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="accents">
-      <div class="wrap">
-        <h2>Make it yours</h2>
-        <p class="sub">Light or dark, with an accent colour of your choice: pick one of the presets in Preferences &#9656; Appearance, or enter a custom #rrggbb value. Default restores the theme colour.</p>
-        <div class="pair trio">
-          <figure><picture>
-            <img src="assets/screens/accent-purple.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the purple accent selected; selections and the active pane border are purple.">
-          </picture><figcaption>Purple accent in the light theme.</figcaption></figure>
-          <figure><picture>
-            <img src="assets/screens/accent-orange.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the orange accent selected; selections and the active pane border are orange.">
-          </picture><figcaption>Orange accent in the light theme.</figcaption></figure>
-          <figure><picture>
-            <img src="assets/screens/accent-green.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the green accent selected; selections and the active pane border are green.">
-          </picture><figcaption>Green accent in the light theme.</figcaption></figure>
-        </div>
-      </div>
-    </section>
-
-    <section id="ai" class="alt">
-      <div class="wrap">
-        <h2>A terminal beside your files, for AI coding agents too</h2>
-        <p class="sub">A terminal is just another pane. Run a terminal coding agent such as <a href="https://opencode.ai">opencode</a> in one pane, keep your project in a Files pane, and review what changed in a Preview pane.</p>
         <div class="feature">
           <div class="text">
-            <h3>Agent, files and diff in one window</h3>
-            <p>The terminal pane runs any command-line tool, including full-screen TUIs, with application mouse support and up to 1,000,000 rows of scrollback.</p>
-            <p>Git status markers in the listing show which files were touched, and the Preview pane opens a side-by-side diff against HEAD, so you can read every change before you commit it.</p>
-            <p>Split as many panes as you need: a second agent, a test runner, or a log tail.</p>
+            <p class="eyebrow">New <span class="tag">Next release</span></p>
+            <h2>A media player in a pane</h2>
+            <p>Drop music, audiobooks or videos on the Media pane and keep browsing while they play. Playlist folders, audiobook chapters and bookmarks, subtitles you can style for readability, and a ten-band equalizer.</p>
+            <p><a href="features.html#media">More about Media</a></p>
           </div>
-          <figure class="shot">
-            <picture>
-                <source srcset="assets/screens/ai-workflow-dark.webp" media="(prefers-color-scheme: dark)">
-                <img src="assets/screens/ai-workflow-light.webp" width="1440" height="900" loading="lazy" alt="Three panes: a project folder with Git status markers, a side-by-side diff of main.rs, and a terminal running the opencode terminal UI.">
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/media-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/media-light.webp" width="1440" height="900" loading="lazy" alt="A Files pane and a Preview pane with an audio player on the left; the Media pane on the right shows the playing track with cover art and a playlist with album and audiobook folders.">
               </picture>
-          </figure>
+            </figure>
         </div>
       </div>
     </section>
 
-    <section id="remote">
-      <div class="wrap">
-        <h2>SFTP, SMB and network panes</h2>
-        <p class="sub">Point any pane at <code>sftp://user@host/…</code> or <code>smb://server/share</code>. Remote folders behave like local ones: split, drag &amp; drop, copy and move as background jobs.</p>
-        <div class="pair">
-          <figure><picture>
-            <source srcset="assets/screens/sftp-connect-light.webp" media="(prefers-color-scheme: dark)">
-            <img src="assets/screens/sftp-connect-dark.webp" width="1440" height="900" loading="lazy" alt="The Connect to Server dialog with host, port, user, password and start folder fields.">
-          </picture><figcaption>Connect with a password or key file, and save the server.</figcaption></figure>
-          <figure><picture>
-            <source srcset="assets/screens/sftp-hostkey-dark.webp" media="(prefers-color-scheme: dark)">
-            <img src="assets/screens/sftp-hostkey-light.webp" width="1440" height="900" loading="lazy" alt="A host key confirmation dialog showing the server fingerprint.">
-          </picture><figcaption>Host keys are confirmed on first use; a changed key is refused.</figcaption></figure>
-          <figure><picture>
-            <source srcset="assets/screens/sftp-light.webp" media="(prefers-color-scheme: dark)">
-            <img src="assets/screens/sftp-dark.webp" width="1440" height="900" loading="lazy" alt="An SFTP pane showing a remote folder beside a local pane.">
-          </picture><figcaption>An SFTP pane next to a local one: drag files between them.</figcaption></figure>
-          <figure><picture>
-            <source srcset="assets/screens/network-dark.webp" media="(prefers-color-scheme: dark)">
-            <img src="assets/screens/network-light.webp" width="1440" height="900" loading="lazy" alt="The Network pane listing hosts discovered on the local network.">
-          </picture><figcaption>The Network pane lists file-sharing and remote-login hosts found on your LAN.</figcaption></figure>
-        </div>
-      </div>
-    </section>
-
-    <section id="install" class="alt">
-      <div class="wrap">
-        <h2>Install</h2>
-        <p class="sub">Installers are attached to each <a href="https://github.com/FileManagerUltra/FileManagerUltra/releases">GitHub Release</a>. Each download is a zip: unzip it first. The installers are not signed, so your OS warns on first start.</p>
-        <div class="platforms">
-          <div class="card">
-            <h3>Windows (x64)</h3>
-            <ol>
-              <li>Run the <code>*-setup.exe</code>.</li>
-              <li>If SmartScreen appears, choose <strong>More info → Run anyway</strong>.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h3>macOS (Apple silicon)</h3>
-            <ol>
-              <li>Clear the quarantine flag, open the <code>.dmg</code> and drag the app to Applications.</li>
-              <li>On first start, right-click the app and choose <strong>Open</strong>.</li>
-            </ol>
-            <pre><code>xattr -d com.apple.quarantine ~/Downloads/FileManagerUltra_*.dmg</code></pre>
-          </div>
-          <div class="card">
-            <h3>Linux (x64)</h3>
-            <p>Debian / Ubuntu:</p>
-            <pre><code>sudo apt install ./filemanagerultra_*.deb</code></pre>
-            <p>Any distro (needs FUSE 2):</p>
-            <pre><code>chmod +x filemanagerultra_*.AppImage
-./filemanagerultra_*.AppImage</code></pre>
-          </div>
-          <div class="card">
-            <h3>From source</h3>
-            <p>With the Rust toolchain installed:</p>
-            <pre><code>cargo build --release --locked -p fm-app
-./target/release/filemanagerultra</code></pre>
-          </div>
-        </div>
-        <p class="note">The app checks GitHub Releases for newer versions at startup. This can be turned off in Preferences, and updating is always manual. See the <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/docs/install.md">full install guide</a>.</p>
-      </div>
-    </section>
-
-    <section id="status">
-      <div class="wrap">
-        <h2>Status</h2>
-        <p class="sub">FileManagerUltra is in <strong>beta</strong> (0.1.0): core features work, but expect rough edges and changes between releases. Work is planned and tracked with OpenSpec. Follow along, report issues or contribute on GitHub.</p>
-        <div class="cta" style="justify-content:flex-start">
-          <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/releases">Releases</a>
-          <a class="btn secondary" href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
-          <a class="btn secondary" href="https://github.com/FileManagerUltra/FileManagerUltra/issues">Report an issue</a>
+    <section id="get">
+      <div class="wrap center">
+        <h2>Try it</h2>
+        <p class="sub">Installers for Windows, macOS and Linux are on the GitHub Releases page. FileManagerUltra is in beta and free under the Apache License 2.0.</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/releases">Download</a>
+          <a class="btn secondary" href="install.html">Install guide</a>
         </div>
       </div>
     </section>

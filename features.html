@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Features – FileManagerUltra</title>
+  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, and themes.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/theme.js" defer></script>
+  <script src="assets/lightbox.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="32" height="32"><span>FileManagerUltra</span></a>
+      <nav aria-label="Main">
+        <a href="features.html" aria-current="page">Features</a>
+        <a href="features.html#media">Media</a>
+        <a href="install.html">Install</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra">GitHub</a>
+      </nav>
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-mode="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-mode="light" aria-pressed="false">Light</button>
+        <button type="button" data-mode="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Features</h1>
+        <p class="sub">Screenshots come straight from the app. Most match the page theme, and a few show the other one, so you see both. The Auto / Light / Dark switch at the top changes the page and its screenshots; click any screenshot to enlarge it.</p>
+        <nav class="subnav" aria-label="On this page">
+          <a href="#previews">Previews &amp; Git</a>
+          <a href="#media">Media</a>
+          <a href="#ai">Terminal &amp; AI</a>
+          <a href="#remote">SFTP &amp; SMB</a>
+          <a href="#accents">Themes</a>
+        </nav>
+      </div>
+    </section>
+
+    <section id="previews">
+      <div class="wrap">
+        <h2>Previews, Git and terminals</h2>
+        <p class="sub">Modified files, documents, images and logs open in a Preview pane next to the listing, and a terminal is one split away.</p>
+        <div class="showcase">
+          <div class="feature">
+            <div class="text">
+              <h3>Git diff in the Preview pane</h3>
+              <p>Modified files open as a side-by-side diff against HEAD or any branch or tag, with word highlights and F7 / Shift+F7 to jump between changes.</p>
+              <p>Status letters and tinted names show what changed in the listing and the tree.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/diff-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/diff-dark.webp" width="1440" height="900" loading="lazy" alt="A source folder with Git status markers next to a side-by-side diff of main.rs against HEAD.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Markdown that reads like a document</h3>
+              <p>Nested lists, task lists, aligned tables and code blocks with per-block copy buttons. Zoom a preview from 50% to 400% and search with Ctrl+F.</p>
+              <p>Images next to the document show inline, and the common HTML in READMEs (centered headings, sized images, <code>&lt;picture&gt;</code> for dark and light) renders too. Remote images load only when you allow them.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/markdown-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/markdown-light.webp" width="1440" height="900" loading="lazy" alt="A documents folder next to a rendered Markdown trip plan with a checklist, a budget table and a code block.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Images and thumbnails</h3>
+              <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder.</p>
+              <p>Right-click an image and choose Copy Image to paste the full-size original into a browser or editor.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/thumbs-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/thumbs-dark.webp" width="1440" height="900" loading="lazy" alt="A pictures folder listing next to a preview pane showing a grid of image thumbnails.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Log previews with live tail</h3>
+              <p>Severity filters, search and UTC time ranges from five minutes to seven days, or custom dates and times.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/log-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/log-light.webp" width="1440" height="900" loading="lazy" alt="A server log previewed with colour-coded INFO, WARN and ERROR lines and a filter toolbar.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Terminals are just panes</h3>
+              <p>Put a terminal beside your files. Hold Shift for local selection and scrolling when an application captures the mouse.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/terminal-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/terminal-dark.webp" width="1440" height="900" loading="lazy" alt="A terminal pane running git commands above a file listing, next to a Markdown preview.">
+              </picture>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="media" class="alt">
+      <div class="wrap">
+        <h2>Media <span class="tag">Next release</span></h2>
+        <p class="sub">A music, audiobook and video player that is just another pane. Media is on <code>main</code> and ships in the next release; <a href="install.html#source">build from source</a> to try it now.</p>
+        <div class="showcase">
+          <div class="feature">
+            <div class="text">
+              <h3>Play from the files you are looking at</h3>
+              <p>Drop files or whole folders on the Media pane, or use Play, Play next and Add to queue in Files and Preview. Each added folder becomes a playlist folder you can collapse, lock, rename and reorder by drag and drop.</p>
+              <p>Gapless playback between tracks, shuffle and repeat, and playback that carries on in the background with Previous, Play/Pause, Next and volume in the status bar. Import M3U, M3U8 and PLS playlists or save the queue as M3U8. Files on SFTP and SMB play too.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/media-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/media-light.webp" width="1440" height="900" loading="lazy" alt="A Files pane and a Preview pane with an audio player on the left; the Media pane on the right shows the playing track with cover art and a playlist with album and audiobook folders.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Audiobooks that remember your place</h3>
+              <p><code>.m4b</code> files, files tagged Audiobook and folders you mark get Back and Forward skip buttons (15 s / 30 s, adjustable), previous and next chapter, a chapter list and bookmarks.</p>
+              <p>The seek bar and progress percentage span the whole book, even across many files. Playing a book again continues where you stopped, and finished books get a check mark.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/audiobook-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/audiobook-dark.webp" width="1440" height="900" loading="lazy" alt="The Media pane playing an audiobook at 20:52 of 42:00, with skip and chapter buttons, a bookmarks menu and the chapter list open on the chapter Fog.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Video with subtitles</h3>
+              <p>Video with sound, fullscreen (F), frame-by-frame stepping while paused, 0.5× to 3× speed with the pitch kept, and a choice of audio track. YouTube-style keys work throughout: Space or K, J and L, arrows, 0–9.</p>
+              <p>Subtitle files next to the video, such as <code>movie.en.srt</code>, are found automatically. Embedded tracks, SRT, WebVTT and ASS/SSA work as well; G and H shift the timing in 0.1 s steps. DVD images (<code>.iso</code>), <code>.VOB</code> and Blu-ray or camcorder <code>.m2ts</code> files play directly.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/video-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/video-light.webp" width="1440" height="900" loading="lazy" alt="The Media pane showing a Mandelbrot fractal video with the English subtitle line: Every point is tested: does it stay bounded?">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Subtitles you can read</h3>
+              <p>Preferences ▸ Media sets the size, position, font, colours, a background box, outline or shadow, and spacing, the same for every subtitle format.</p>
+              <p>Presets such as High contrast and Yellow on black are one click away, and a live preview shows the contrast ratio with a warning when text would be hard to read. Picture-based subtitles (Blu-ray, DVD) are not shown yet.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/subtitles-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/subtitles-dark.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Media with a subtitle preview in yellow on a black box and the note: Contrast 19.6:1, excellent (WCAG AAA). The video behind it uses the same style.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature">
+            <div class="text">
+              <h3>Ten-band equalizer</h3>
+              <p>Built-in and saved presets, with an automatic preamp to avoid clipping. The equalizer stays open in its own window while you try presets.</p>
+              <p>Also in the Options menu: an A-B loop to repeat part of a track, and a sleep timer that fades out before pausing.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/equalizer-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/equalizer-light.webp" width="1440" height="900" loading="lazy" alt="The Equalizer window with the Loudness preset: low and high bands raised, the middle flat.">
+              </picture>
+            </figure>
+          </div>
+        </div>
+        <p class="note">Video, chapters and poster frames use ffmpeg, and so do audio formats the built-in decoder can't read (such as WMA, Opus and APE). On Windows, Preferences ▸ Media can download a pinned, checksum-verified ffmpeg for you; on Linux and macOS, install it with your package manager. See <a href="install.html#ffmpeg">Install</a>.</p>
+      </div>
+    </section>
+
+    <section id="ai">
+      <div class="wrap">
+        <h2>A terminal beside your files, for AI coding agents too</h2>
+        <p class="sub">A terminal is just another pane. Run a terminal coding agent such as <a href="https://opencode.ai">opencode</a> in one pane, keep your project in a Files pane, and review what changed in a Preview pane.</p>
+        <div class="feature">
+          <div class="text">
+            <h3>Agent, files and diff in one window</h3>
+            <p>The terminal pane runs any command-line tool, including full-screen TUIs, with application mouse support and up to 1,000,000 rows of scrollback.</p>
+            <p>Git status markers in the listing show which files were touched, and the Preview pane opens a side-by-side diff against HEAD, so you can read every change before you commit it.</p>
+            <p>Split as many panes as you need: a second agent, a test runner, or a log tail.</p>
+          </div>
+          <figure class="shot">
+            <picture>
+                <source srcset="assets/screens/ai-workflow-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/ai-workflow-light.webp" width="1440" height="900" loading="lazy" alt="Three panes: a project folder with Git status markers, a side-by-side diff of main.rs, and a terminal running the opencode terminal UI.">
+              </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="remote" class="alt">
+      <div class="wrap">
+        <h2>SFTP, SMB and network panes</h2>
+        <p class="sub">Point any pane at <code>sftp://user@host/…</code> or <code>smb://server/share</code>. Remote folders behave like local ones: split, drag &amp; drop, copy and move as background jobs.</p>
+        <div class="pair">
+          <figure><picture>
+            <source srcset="assets/screens/sftp-connect-light.webp" media="(prefers-color-scheme: dark)">
+            <img src="assets/screens/sftp-connect-dark.webp" width="1440" height="900" loading="lazy" alt="The Connect to Server dialog with host, port, user, password and start folder fields.">
+          </picture><figcaption>Connect with a password or key file, and save the server.</figcaption></figure>
+          <figure><picture>
+            <source srcset="assets/screens/sftp-hostkey-dark.webp" media="(prefers-color-scheme: dark)">
+            <img src="assets/screens/sftp-hostkey-light.webp" width="1440" height="900" loading="lazy" alt="A host key confirmation dialog showing the server fingerprint.">
+          </picture><figcaption>Host keys are confirmed on first use; a changed key is refused.</figcaption></figure>
+          <figure><picture>
+            <source srcset="assets/screens/sftp-light.webp" media="(prefers-color-scheme: dark)">
+            <img src="assets/screens/sftp-dark.webp" width="1440" height="900" loading="lazy" alt="An SFTP pane showing a remote folder beside a local pane.">
+          </picture><figcaption>An SFTP pane next to a local one: drag files between them.</figcaption></figure>
+          <figure><picture>
+            <source srcset="assets/screens/network-dark.webp" media="(prefers-color-scheme: dark)">
+            <img src="assets/screens/network-light.webp" width="1440" height="900" loading="lazy" alt="The Network pane listing hosts discovered on the local network.">
+          </picture><figcaption>The Network pane lists file-sharing and remote-login hosts found on your LAN.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="accents">
+      <div class="wrap">
+        <h2>Make it yours</h2>
+        <p class="sub">Light or dark, with an accent colour of your choice: pick one of the presets in Preferences &#9656; Appearance, or enter a custom #rrggbb value. Default restores the theme colour.</p>
+        <div class="pair trio">
+          <figure><picture>
+            <img src="assets/screens/accent-purple.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the purple accent selected; selections and the active pane border are purple.">
+          </picture><figcaption>Purple accent in the light theme.</figcaption></figure>
+          <figure><picture>
+            <img src="assets/screens/accent-orange.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the orange accent selected; selections and the active pane border are orange.">
+          </picture><figcaption>Orange accent in the light theme.</figcaption></figure>
+          <figure><picture>
+            <img src="assets/screens/accent-green.webp" width="1440" height="900" loading="lazy" alt="Preferences open on Appearance with the green accent selected; selections and the active pane border are green.">
+          </picture><figcaption>Green accent in the light theme.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>FileManagerUltra is open source under the <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/LICENSE">Apache License 2.0</a>.</span>
+      <span><a href="https://github.com/FileManagerUltra/FileManagerUltra">App repository</a> · <a href="https://github.com/FileManagerUltra/FileManagerUltraSite">Site repository</a></span>
+    </div>
+  </footer>
+</body>
+</html>

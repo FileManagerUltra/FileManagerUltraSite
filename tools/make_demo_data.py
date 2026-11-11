@@ -2,6 +2,7 @@
 """Build a throwaway demo home directory used for website screenshots and the demo video.
 
 Usage: make_demo_data.py <target-dir>   (the directory is wiped and recreated)
+Needs Pillow and ffmpeg (libmp3lame, libx264) for the playable demo media.
 """
 import math
 import os
@@ -33,7 +34,7 @@ def put(path, text="", days_ago=0.0):
     return p
 
 
-def picture(name, seed, size=(1280, 853), days_ago=1.0):
+def art(seed, size):
     r = random.Random(seed)
     w, h = size
     img = Image.new("RGB", size)
@@ -53,6 +54,11 @@ def picture(name, seed, size=(1280, 853), days_ago=1.0):
     for i in range(0, w, 8):
         y = h * 0.78 + math.sin(i / 90 + seed) * 40
         d.rectangle([i, y, i + 8, h], fill=(10, 20, 30, 150))
+    return img
+
+
+def picture(name, seed, size=(1280, 853), days_ago=1.0):
+    img = art(seed, size)
     p = home / "Pictures" / name
     p.parent.mkdir(parents=True, exist_ok=True)
     img.save(p, quality=88)
@@ -174,10 +180,105 @@ put("Projects/dotfiles/vimrc", "set number\nsyntax on\n", 100)
 # --- Misc ---------------------------------------------------------------------
 for i in range(1, 9):
     put(f"Downloads/installer-{i}.deb", bytes(rng.getrandbits(8) for _ in range(30000 * i)), i * 2)
-put("Downloads/holiday-video.mp4", bytes(rng.getrandbits(8) for _ in range(1_500_000)), 6)
-for n in ["Midnight City", "Strobe", "Intro", "Open Eye Signal", "Tadow"]:
-    put(f"Music/{n}.mp3", bytes(rng.getrandbits(8) for _ in range(80000)), 60)
 (home / "Desktop").mkdir()
-(home / "Videos").mkdir()
 (home / "Public").mkdir()
+for rc in (".bashrc", ".bash_profile"):
+    put(rc, "PS1='demo $ '\n", 30)
+
+# --- Media: real, playable files generated with ffmpeg ---------------------------
+# Invented artists, albums and books; the audio is synthesised chords and the
+# video is an ffmpeg test source, so nothing here is copyrighted or personal.
+tmp = home / ".cache" / "demo-build"
+tmp.mkdir(parents=True)
+
+
+def ffmpeg(*args):
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *args], check=True)
+
+
+def cover(name, seed):
+    p = tmp / f"{name}.jpg"
+    art(seed, (600, 600)).save(p, quality=88)
+    return p
+
+
+def tone(seed, seconds):
+    """aevalsrc expression: a slowly pulsing three-note chord, different per seed."""
+    r = random.Random(seed)
+    root = r.choice([110, 123.5, 130.8, 146.8, 164.8])
+    notes = [root, root * r.choice([1.25, 1.2]), root * 1.5, root * 2]
+    parts = [f"0.12*sin(2*PI*{f:.2f}*t)*(0.6+0.4*sin(2*PI*{0.1 + i * 0.07:.2f}*t))"
+             for i, f in enumerate(notes)]
+    return f"aevalsrc='{'+'.join(parts)}':s=44100:d={seconds}"
+
+
+def stamp(p, days_ago):
+    t = NOW - days_ago * 86400
+    os.utime(p, (t, t))
+
+
+def track(path, seed, seconds, tags, art_seed, days_ago, codec=("-c:a", "libmp3lame", "-b:a", "96k")):
+    p = home / path
+    p.parent.mkdir(parents=True, exist_ok=True)
+    meta = [x for k, v in tags.items() for x in ("-metadata", f"{k}={v}")]
+    ffmpeg("-f", "lavfi", "-i", tone(seed, seconds), "-i", str(cover(f"c{art_seed}", art_seed)),
+           "-map", "0:a", "-map", "1:v", *codec, "-c:v", "mjpeg", "-disposition:v", "attached_pic",
+           "-id3v2_version", "3", *meta, str(p))
+    stamp(p, days_ago)
+
+
+albums = [
+    ("Northern Lights Ensemble", "Tidal Hours", 2024, 21,
+     [("First Light", 192), ("Saltwater", 241), ("Harbour Bells", 207), ("Low Tide", 263), ("Lanterns", 228)]),
+    ("Mira Okafor", "Paper Satellites", 2025, 34,
+     [("Orbit", 215), ("Static Bloom", 186), ("Signal Fire", 249), ("Homeward", 232)]),
+]
+for artist, album, year, seed, songs in albums:
+    for n, (title, secs) in enumerate(songs, 1):
+        track(f"Music/{artist}/{album}/{n:02d} {title}.mp3", seed + n, secs,
+              {"title": title, "artist": artist, "album": album, "date": year, "track": n,
+               "genre": "Ambient"}, seed, 40 + n)
+
+# An .m4b audiobook with chapters.
+book = home / "Audio Books" / "Elin Varga - The Lighthouse Keeper.m4b"
+book.parent.mkdir(parents=True)
+chapters = ["Opening", "The Keeper", "Fog", "A Letter", "The Storm", "Morning"]
+ch_len = 7 * 60 * 1000
+meta = tmp / "chapters.txt"
+meta.write_text(";FFMETADATA1\ntitle=The Lighthouse Keeper\nartist=Elin Varga\nalbum=The Lighthouse Keeper\n"
+                "genre=Audiobook\n" + "".join(
+                    f"[CHAPTER]\nTIMEBASE=1/1000\nSTART={i * ch_len}\nEND={(i + 1) * ch_len}\ntitle={c}\n"
+                    for i, c in enumerate(chapters)))
+ffmpeg("-f", "lavfi", "-i", tone(91, len(chapters) * ch_len // 1000), "-i", str(meta),
+       "-i", str(cover("book", 91)), "-map", "0:a", "-map", "2:v", "-map_metadata", "1",
+       "-map_chapters", "1", "-c:a", "aac", "-b:a", "48k", "-ac", "1", "-c:v", "mjpeg",
+       "-disposition:v", "attached_pic", "-f", "mp4", str(book))
+stamp(book, 15)
+
+# A folder audiobook of mp3 chapters (recognised from the "Chapter…" names).
+for n in range(1, 6):
+    track(f"Audio Books/Tomas Lind - Wind Over Water/Chapter {n:02d}.mp3", 70 + n, 300 + n * 17,
+          {"title": f"Chapter {n}", "artist": "Tomas Lind", "album": "Wind Over Water", "track": n,
+           "genre": "Audiobook"}, 77, 25, codec=("-c:a", "libmp3lame", "-b:a", "48k", "-ac", "1"))
+
+
+def video(path, seconds, source, days_ago, seed):
+    p = home / path
+    p.parent.mkdir(parents=True, exist_ok=True)
+    ffmpeg("-f", "lavfi", "-t", str(seconds), "-i", f"{source}:s=1280x720:r=25", "-f", "lavfi", "-i", tone(seed, seconds),
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-pix_fmt", "yuv420p",
+           "-c:a", "aac", "-b:a", "96k", "-shortest", "-metadata", f"title={p.stem}", str(p))
+    stamp(p, days_ago)
+    return p
+
+
+v = video("Videos/Fractal Zoom.mp4", 90, "mandelbrot=end_scale=0.01:end_pts=2250", 4, 55)
+subs = [(2, 7, "We start with the whole Mandelbrot set."), (8, 14, "Every point is tested: does it stay bounded?"),
+        (15, 21, "The colours show how quickly points escape."), (22, 28, "Zooming in, the edge never gets simpler."),
+        (31, 37, "Small copies of the whole set appear."), (40, 46, "There is always more detail to find.")]
+(v.parent / "Fractal Zoom.en.srt").write_text("".join(
+    f"{i}\n00:00:{a:02d},000 --> 00:00:{b:02d},000\n{text}\n\n" for i, (a, b, text) in enumerate(subs, 1)))
+video("Videos/Colour Gradients.mp4", 45, "gradients=speed=0.02:n=4:seed=5", 11, 63)
+video("Downloads/holiday-video.mp4", 20, "gradients=speed=0.05:seed=9", 6, 12)
+shutil.rmtree(tmp)
 print(f"demo home ready: {home}")
