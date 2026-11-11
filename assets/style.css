@@ -8,6 +8,8 @@
   --accent: #1f6fd1;
   --accent-text: #ffffff;
   --code-bg: #eceff4;
+  --warn-bg: #fff4dc;
+  --warn-border: #b97800;
   --shadow: 0 10px 30px rgba(20, 30, 50, 0.15);
   --radius: 10px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -15,9 +17,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg: #14161a; --bg-alt: #1b1e24; --text: #e8eaee; --muted: #a0a7b4; --border: #2c313a; --accent: #4594ed; --accent-text: #0b1220; --code-bg: #242830; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+  :root:not([data-theme="light"]) { --bg: #14161a; --bg-alt: #1b1e24; --text: #e8eaee; --muted: #a0a7b4; --border: #2c313a; --accent: #4594ed; --accent-text: #0b1220; --code-bg: #242830; --warn-bg: #2d2513; --warn-border: #e0a030; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 }
-:root[data-theme="dark"] { --bg: #14161a; --bg-alt: #1b1e24; --text: #e8eaee; --muted: #a0a7b4; --border: #2c313a; --accent: #4594ed; --accent-text: #0b1220; --code-bg: #242830; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+:root[data-theme="dark"] { --bg: #14161a; --bg-alt: #1b1e24; --text: #e8eaee; --muted: #a0a7b4; --border: #2c313a; --accent: #4594ed; --accent-text: #0b1220; --code-bg: #242830; --warn-bg: #2d2513; --warn-border: #e0a030; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
@@ -201,3 +203,10 @@ h2 .tag { font-size: .8rem; }
   nav a { font-size: .9rem; }
   section[id] { scroll-margin-top: 1rem; }
 }
+
+/* Prominent notice (install page: unsigned installers) */
+.notice { border: 1px solid var(--warn-border); border-left-width: 6px; background: var(--warn-bg); border-radius: var(--radius); padding: 1rem 1.25rem; margin: 0 0 2rem; max-width: 52rem; }
+.notice h2 { font-size: 1.15rem; margin: 0 0 .4rem; }
+.notice h2::before { content: "\26A0\FE0E"; color: var(--warn-border); margin-right: .45rem; }
+.notice p { margin: 0 0 .5rem; }
+.notice p:last-child { margin-bottom: 0; }
