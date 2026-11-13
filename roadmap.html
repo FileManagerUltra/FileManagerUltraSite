@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadmap – FileManagerUltra</title>
+  <meta name="description" content="Where FileManagerUltra is heading: what is coming in the next release, what is being worked on now, and what is planned next and later.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/theme.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="32" height="32"><span>FileManagerUltra</span></a>
+      <nav aria-label="Main">
+        <a href="features.html">Features</a>
+        <a href="features.html#media">Media</a>
+        <a href="install.html">Install</a>
+        <a href="roadmap.html" aria-current="page">Roadmap</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/FileManagerUltra/FileManagerUltra">GitHub</a>
+      </nav>
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-mode="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-mode="light" aria-pressed="false">Light</button>
+        <button type="button" data-mode="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Roadmap</h1>
+        <p class="sub">Where FileManagerUltra is heading. These are plans, not promises: order and scope can change, and there are no dates. Ideas and bug reports are welcome as <a href="https://github.com/FileManagerUltra/FileManagerUltra/issues">GitHub issues</a>.</p>
+        <p class="updated">Last updated <time datetime="2026-11-13">13 November 2026</time>, after release 0.2.1.</p>
+        <nav class="subnav" aria-label="On this page">
+          <a href="#next-release">Next release</a>
+          <a href="#now">Now</a>
+          <a href="#next">Next</a>
+          <a href="#later">Later</a>
+        </nav>
+      </div>
+    </section>
+
+    <section id="next-release">
+      <div class="wrap">
+        <h2>Ready for the next release <span class="tag">Next release</span></h2>
+        <p class="sub">Already done on <code>main</code> and waiting for the next release. The <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">changelog</a> has the full list.</p>
+        <div class="grid">
+          <div class="card"><h3>SVG preview</h3><p>SVG files show as pictures in Preview, text included, with Fit and 100% and a choice of background behind transparent parts. Turn Preview off to read the source.</p></div>
+          <div class="card"><h3>SVG thumbnails</h3><p>SVG drawings, including compressed <code>.svgz</code> files, show as pictures in folder thumbnails.</p></div>
+          <div class="card"><h3>Easier file type settings</h3><p>Preferences ▸ Preview ▸ File types lists the types on the left and their filename patterns on the right, editable in place and with the keyboard.</p></div>
+          <div class="card"><h3>Safer SVG images</h3><p>An SVG can no longer make the app read other files from your computer through image references.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="now" class="alt">
+      <div class="wrap">
+        <h2>Now: finishing the 0.2 beta</h2>
+        <p class="sub">Making the current release solid on every platform, and closing the gaps left in the Media pane.</p>
+        <div class="grid">
+          <div class="card"><h3>Windows and macOS checks</h3><p>Hands-on testing of live folder refresh (including mapped network drives), USB and VeraCrypt devices, the ffmpeg download on Windows and the installed Windows shortcut icon.</p></div>
+          <div class="card"><h3>Signed installers</h3><p>Code-signed Windows installers and notarized macOS builds, so the OS stops warning on first start. Certificates cost money every year: <a href="https://github.com/sponsors/FileManagerUltra">sponsoring</a> helps.</p></div>
+          <div class="card"><h3>Picture-based subtitles</h3><p>Show the image subtitles found on DVDs and Blu-ray discs (VobSub and PGS) in the Media pane. Text subtitles already work.</p></div>
+          <div class="card"><h3>Hardware video decoding</h3><p>Let the graphics card decode video where it can, falling back to software decoding when it can't.</p></div>
+          <div class="card"><h3>Fixes for what you report</h3><p>Bugs reported by early users come first. <a href="https://github.com/FileManagerUltra/FileManagerUltra/issues">Report an issue</a>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="next">
+      <div class="wrap">
+        <h2>Next</h2>
+        <p class="sub">The features planned after that.</p>
+        <div class="grid">
+          <div class="card"><h3>File permissions</h3><p>View and change permissions and ownership (<code>chmod</code>/<code>chown</code> on Linux and macOS, basic ACLs on Windows), recursively if you like, with a clear explanation when a change is denied. Works on SFTP where the server allows it.</p></div>
+          <div class="card"><h3>Text and Markdown editor</h3><p>Edit in a pane with save, undo/redo, find and replace, syntax highlighting and a live Markdown preview. Saving never loses data on failure, and you are warned when the file changed on disk. Works on remote files too.</p></div>
+          <div class="card"><h3>Better search</h3><p>Building on Find Files: regular expressions, include and exclude filters, search on SFTP and SMB, results that open at the matching line, and search and replace across files.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="later" class="alt">
+      <div class="wrap">
+        <h2>Later</h2>
+        <p class="sub">Wanted, but not scheduled yet.</p>
+        <div class="grid">
+          <div class="card"><h3>Batch rename</h3><p>Rename many files at once with numbering, text replacement and case changes, a before/after preview, and safe handling of collisions and swaps.</p></div>
+          <div class="card"><h3>Folder synchronization</h3><p>Compare two folders, review a plan of copies, updates and deletions before anything changes, then run it: one-way, mirror or two-way, with saved folder pairs.</p></div>
+          <div class="card"><h3>Archives</h3><p>Browse zip and tar archives as folders and extract from them.</p></div>
+          <div class="card"><h3>Restore layout: yes, no or ask</h3><p>Choose whether the previous pane layout comes back at startup, or have the app ask each time.</p></div>
+          <div class="card"><h3>Automation</h3><p>A command line and control channel on top of the app's command registry, so scripts and tools can drive it.</p></div>
+          <div class="card"><h3>Plugins</h3><p>Extend the file manager with your own additions.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="principles">
+      <div class="wrap">
+        <h2>What stays the same</h2>
+        <div class="grid">
+          <div class="card"><h3>Never crash</h3><p>Failures become clear errors you can act on.</p></div>
+          <div class="card"><h3>Never block</h3><p>Disk and network work runs in the background, so the window always responds.</p></div>
+          <div class="card"><h3>Security is tested</h3><p>No secrets on disk, and every input is treated as hostile.</p></div>
+        </div>
+        <div class="cta more" style="justify-content:flex-start">
+          <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/ROADMAP.md">Roadmap on GitHub</a>
+          <a class="btn secondary" href="https://github.com/FileManagerUltra/FileManagerUltra/issues">Suggest an idea</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>FileManagerUltra is open source under the <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/LICENSE">Apache License 2.0</a>.</span>
+      <span><a href="https://github.com/FileManagerUltra/FileManagerUltra">App repository</a> · <a href="https://github.com/FileManagerUltra/FileManagerUltraSite">Site repository</a></span>
+    </div>
+  </footer>
+</body>
+</html>

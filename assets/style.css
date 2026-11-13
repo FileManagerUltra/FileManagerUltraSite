@@ -215,3 +215,6 @@ h2 .tag { font-size: .8rem; }
 /* Sponsor button (landing page) */
 .btn.sponsor { display: inline-flex; align-items: center; gap: .45rem; }
 .btn.sponsor .heart { color: var(--sponsor); flex: none; }
+
+/* Roadmap page: last-updated line under the page heading */
+.page-head .updated { margin: -.8rem 0 1.4rem; color: var(--muted); font-size: .9rem; }
