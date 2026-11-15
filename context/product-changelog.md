@@ -7,6 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-15
+
+### Added
+- Every pane has its own zoom: click the zoom button (a magnifying glass with a plus) next to the pane type in the pane's header for zoom in, the percentage (click to reset) and zoom out. Files, Network, SFTP, Trash and Media panes get larger or smaller text and rows (in the Media pane the player buttons, seek bar and playlist too); other panes and the rest of the window keep their size, and the zoom is saved with the workspace. While a pane is zoomed, its button shows the percentage. The button works from the keyboard too (Tab to it, Enter to open, Escape to close), has large click targets and is labelled for screen readers.
+- Each terminal has its own zoom (the header zoom button, or Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0 while it has focus); other terminals keep their size.
+- Ctrl+Tab and Ctrl+Shift+Tab switch between workspace tabs, also from a terminal. By default the first press returns to the tab you used before; keep Ctrl held and press Tab again to go further back. Preferences > Workspaces can switch to plain left-to-right order instead.
+- The status bar shows the playing time (elapsed / total) next to its media controls, so you can see where playback is with the Media pane closed or another workspace in front.
+- A diagnostic log for bug reports: turn on Preferences > Advanced > Troubleshooting > Write diagnostic log. Once a second it records the app's memory use (including graphics memory) and what it was doing, such as playing video or opening panes. It never records file names, folder names, server names or passwords. Open log folder (also in the Help menu) shows the logs; each session's log stops at 64 MiB, and the last 20 are kept.
+- About shows which build you are running, so test builds can be told apart.
+
+### Changed
+- In a terminal, Ctrl+Shift+Tab now switches to the previous workspace tab instead of swapping panes; use the Panes menu to swap panes from a terminal.
+- Playing video redraws the window at the video's own frame rate instead of 60 times a second, and not at all while the player is hidden or the window is minimized, which saves power.
+- Thumbnails now keep at most 128 MiB in memory by default (was 192 MiB). Change it in Preferences > Advanced > Thumbnails if you browse very large picture folders.
+- Loading spinners (folder sizes, previews, searches, jobs) redraw about 15 times a second instead of at the screen's refresh rate, which saves power while something loads.
+- While idle the window no longer redraws several times every two seconds while checking for new drives; it redraws only when the check is done.
+- Windows: the app's settings folder in `AppData\Roaming` is now called `FileManagerUltra`, the same as its folder in `AppData\Local`. An existing `filemanagerultra` folder is renamed when the app starts; your settings, workspaces and playlists stay.
+
+### Fixed
+- Show in Folder (from Find Files or the playlist) no longer fails in a workspace without a Files pane, such as one holding only a terminal; it opens a Files pane beside it.
+- Ctrl+Shift+1 now switches to the first workspace tab, like Ctrl+Shift+2 to 9 already did, and Ctrl plus a digit works on keyboard layouts that need Shift for digits.
+- Windows: File > Open With… did not open; it now shows Windows' own "How do you want to open this file?" dialog.
+- Windows with an NVIDIA graphics card: the app's memory no longer grows while its window is visible (about 1 MB a second while playing video or moving the mouse over it, up to many gigabytes over a long session). The window is now drawn with Direct3D 12 instead of OpenGL, so changing the driver's "Threaded optimization" setting is no longer needed. If Direct3D cannot start (older or basic graphics cards), the app uses OpenGL and says so once; on a computer without a usable graphics card at all it still opens, drawing in software. Preferences > Advanced > Troubleshooting > Renderer switches between Direct3D and OpenGL (after a restart).
+- Seeking or restarting a video keeps its picture buffer on the graphics card instead of making a new one each time.
+
+## [0.2.2] - 2026-11-13
+
+### Added
+- Camera RAW photos (DNG, CR2, NEF, ARW, ORF, PEF and similar) are shown in Preview and as folder thumbnails, using the preview picture the camera stored inside them. Copy Image copies that picture.
+- Pictures in Preview have Rotate left and Rotate right buttons. Only the view turns; the file is not changed, and the next picture starts upright.
+- Right-click a playlist row and pick Show in folder to open its folder in a Files pane with the file selected. A playlist folder made from a folder on disk offers Go to folder on disk.
+- SVG files are shown as pictures in Preview, including their text, with Fit and 100% and a choice of background behind transparent parts (checkered, white, black or 50% grey, remembered). Turn off Preview in the header to read the SVG source (with Pretty and Wrap). SVG is a new type in Preferences > Preview > File types; existing settings pick it up automatically.
+- SVG drawings, including compressed `.svgz` files, show as pictures in folder thumbnails, over the same background.
+- Picture-based subtitles from Blu-ray rips (PGS) and DVDs (VobSub) can now be shown in the Media pane. They follow the subtitle Size and Distance from bottom settings; switching them keeps the sound playing.
+- Interlaced video, such as DVDs and TV recordings, is deinterlaced automatically, so moving edges no longer show comb lines. This applies to playback, poster frames and thumbnails; other videos are not changed.
+- Videos are decoded on the graphics card where possible (VA-API on Linux, Direct3D 11 on Windows, VideoToolbox on macOS), which uses less power and plays large videos more smoothly. If the graphics card cannot decode a video, it plays in software without interruption. Turn it off in Preferences > Media > Playback; the player's menu shows which one is used.
+- Preferences can be used with the keyboard alone. Tab moves through the topic list, the topic's settings and Close, and stays inside the window. Up and Down in the topic list, or Ctrl+Tab and Ctrl+Shift+Tab anywhere, switch topics. Choices such as theme, accent colour and density are a single Tab stop whose options you pick with the arrow keys. The focused control is ringed and scrolls into view.
+- In Preferences > Preview > File types, the arrow keys work in both lists: Up and Down move through types or patterns; Tab, Shift+Tab, Left and Right switch between the two lists.
+
+### Changed
+- Media fullscreen (F, or a double-click on the video) now fills the whole screen instead of only the app window. Leaving it puts the window back as it was.
+- Renaming a workspace tab or a bookmark starts with the current name selected, so typing replaces it.
+- Dropping a file on the Media player that is already in the playlist no longer adds it a second time: its row is selected and it starts playing (a file that is already playing just keeps playing).
+- Text in SVG images inside Markdown documents is now drawn.
+- Preferences > Preview > File types is easier to use: pick a type in the list on the left to see its filename patterns on the right, then add (+), remove (−) or edit (pencil, a second click, or F2) them in place. Up and down arrows change which type is checked first. In Preferences, Esc in a text field now leaves the field first instead of closing the window.
+- The subtitle Font and Edge style in Preferences > Media are now option rows instead of dropdowns, so every choice is visible at once.
+
+### Fixed
+- Closing a workspace, a pane or the Media pane now gives back the memory its pictures, video frames and thumbnails used.
+- Playing a video no longer makes the app's memory use grow steadily on Windows: each new frame now reuses the same picture on the graphics card instead of making a new one.
+- Photos from phones and cameras are shown upright in Preview, folder thumbnails and Markdown documents, following the orientation the camera stored. Thumbnails made earlier are redrawn.
+- Videos filmed upright on a phone no longer play stretched sideways: they are shown upright and tall, as on the phone.
+- Arrow keys pressed in Preferences no longer also move the cursor in the file list or folder thumbnails behind it.
+
+### Security
+- An SVG (in Preview or as an image in a Markdown document) can no longer make the app read other files from your computer through image references.
+
 ## [0.2.1] - 2026-11-12
 
 ### Added
@@ -156,7 +213,9 @@ First public release (beta).
 
 - macOS install notes: clear the quarantine flag on the downloaded `.dmg` (`xattr -d com.apple.quarantine`), as the app is not yet signed or notarized.
 
-[Unreleased]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.2.2...v0.2.3
+[0.2.2]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/FileManagerUltra/FileManagerUltra/compare/v0.1.2...v0.1.3

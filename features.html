@@ -82,7 +82,8 @@
           <div class="feature">
             <div class="text">
               <h3>Images and thumbnails</h3>
-              <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder.</p>
+              <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder. Photos from phones and cameras appear upright, and Rotate left and Rotate right turn the view without changing the file.</p>
+              <p>Camera RAW photos (DNG, CR2, NEF, ARW and similar) show the picture the camera stored inside them. SVG drawings show as pictures with Fit and 100% and a choice of background behind transparent parts; turn Preview off to read the source.</p>
               <p>Right-click an image and choose Copy Image to paste the full-size original into a browser or editor.</p>
             </div>
             <figure class="shot">
@@ -108,6 +109,7 @@
             <div class="text">
               <h3>Terminals are just panes</h3>
               <p>Put a terminal beside your files. Hold Shift for local selection and scrolling when an application captures the mouse.</p>
+              <p>Each terminal has its own zoom (Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0), and so does every Files, Network, SFTP, Trash and Media pane, from the zoom button in its header. The zoom is saved with the workspace.</p>
             </div>
             <figure class="shot">
               <picture>
@@ -123,13 +125,13 @@
     <section id="media" class="alt">
       <div class="wrap">
         <h2>Media</h2>
-        <p class="sub">A music, audiobook and video player that is just another pane. New in 0.2.0; media keys and audio speed arrived in 0.2.1.</p>
+        <p class="sub">A music, audiobook and video player that is just another pane. New in 0.2.0; media keys and audio speed arrived in 0.2.1, picture subtitles and hardware video decoding in 0.2.2.</p>
         <div class="showcase">
           <div class="feature">
             <div class="text">
               <h3>Play from the files you are looking at</h3>
               <p>Drop files or whole folders on the player to play them right away, or on the playlist to add them exactly where the line shows. Play, Play next and Add to queue work from Files and Preview too. Each added folder becomes a playlist folder you can collapse, lock, rename and reorder by drag and drop.</p>
-              <p>Gapless playback between tracks, shuffle and repeat, and playback that carries on in the background with Previous, Play/Pause, Next and volume in the status bar. Import M3U, M3U8 and PLS playlists or save the queue as M3U8. Files on SFTP and SMB play too.</p>
+              <p>Gapless playback between tracks, shuffle and repeat, and playback that carries on in the background with Previous, Play/Pause, Next, volume and the playing time in the status bar. Import M3U, M3U8 and PLS playlists or save the queue as M3U8. Files on SFTP and SMB play too.</p>
               <p>Your keyboard's media keys work while you use other apps, and the system's media controls show the title, artist, album and cover art: the GNOME or KDE media widget, the Windows media overlay and macOS Now Playing.</p>
             </div>
             <figure class="shot">
@@ -182,8 +184,9 @@
           <div class="feature">
             <div class="text">
               <h3>Video with subtitles</h3>
-              <p>Video with sound, fullscreen (F), frame-by-frame stepping while paused, 0.5× to 3× speed with the pitch kept, and a choice of audio track. Each video in a folder, such as a series of episodes, resumes where you stopped it. YouTube-style keys work throughout: Space or K, J and L, arrows, 0–9.</p>
+              <p>Video with sound, fullscreen (F) that fills the whole screen, frame-by-frame stepping while paused, 0.5× to 3× speed with the pitch kept, and a choice of audio track. Each video in a folder, such as a series of episodes, resumes where you stopped it. YouTube-style keys work throughout: Space or K, J and L, arrows, 0–9.</p>
               <p>Subtitle files next to the video, such as <code>movie.en.srt</code>, are found automatically. Embedded tracks, SRT, WebVTT and ASS/SSA work as well; G and H shift the timing in 0.1 s steps. DVD images (<code>.iso</code>), <code>.VOB</code> and Blu-ray or camcorder <code>.m2ts</code> files play directly.</p>
+              <p>Video is decoded on the graphics card where possible (VA-API on Linux, Direct3D 11 on Windows, VideoToolbox on macOS), falling back to software without interruption. Interlaced DVDs and TV recordings are deinterlaced automatically, and videos filmed upright on a phone play upright.</p>
             </div>
             <figure class="shot">
               <picture>
@@ -196,7 +199,7 @@
             <div class="text">
               <h3>Subtitles you can read</h3>
               <p>Preferences ▸ Media sets the size, position, font, colours, a background box, outline or shadow, and spacing, the same for every subtitle format.</p>
-              <p>Presets such as High contrast and Yellow on black are one click away, and a live preview shows the contrast ratio with a warning when text would be hard to read. Picture-based subtitles (Blu-ray, DVD) are not shown yet.</p>
+              <p>Presets such as High contrast and Yellow on black are one click away, and a live preview shows the contrast ratio with a warning when text would be hard to read. Picture-based subtitles from DVDs (VobSub) and Blu-ray rips (PGS) show too, following the Size and Distance from bottom settings.</p>
             </div>
             <figure class="shot">
               <picture>
