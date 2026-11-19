@@ -53,6 +53,10 @@ python3 tools/make_demo_data.py /dev/shm/home      # fake home dir (needs Pillow
 
 Capture runs the release binary under `Xvfb` with `HOME=/dev/shm/home` and `XDG_*` pointed inside it, driven by `xdotool`, recorded with `ffmpeg -f x11grab`. (No root needed: `apt-get download xvfb xdotool …` and `dpkg -x` into a temp dir, then add it to `PATH`/`LD_LIBRARY_PATH`.)
 
+## Reporting app bugs
+
+Bugs or rough edges in the app that you notice while capturing media or checking claims go in the app repo's `tests/findings.md` (`../FileManagerUltra/tests/findings.md` from this repo), not in this repo. Add a numbered section per finding with severity, steps, expected and actual results, and the build you used (commit or tag). Once a fix lands, add a short retest note under that finding. Don't put a feature on the site that a finding shows is broken until the fix has shipped.
+
 ## Before you finish
 
 Open `index.html`, `features.html`, `sync.html`, `install.html` and `roadmap.html` locally, check dark and light, narrow (360 px) and wide widths, and that every link/asset resolves. Commit with the `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>` trailer.
