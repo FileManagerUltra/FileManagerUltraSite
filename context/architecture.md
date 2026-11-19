@@ -30,7 +30,7 @@ This document is the source of truth for the crate map, layering, data model, co
 These apply to every crate. They are checked in review and by CI (`cargo xtask layers`, `cargo clippy`).
 
 1. **Never crash.** Non-test code contains no `unwrap()`, `expect()`, `panic!`, `todo!`, `unimplemented!`, `unreachable!` — errors propagate as `FmError` with `?`. A malformed filename, a vanished file mid-copy, an unreachable SMB server, a full disk or a 0-byte write must produce a user-visible error, never a panic. Unimplemented backends return `FmError::Unsupported`.
-2. **No `unsafe` in our code.** `unsafe_code = "forbid"` workspace-wide. No FFI: the SMB backend is the pure-Rust `smb` crate. Exceptions: `fm-wayland` (two `unsafe` calls adopting winit's Wayland display; roadmap priority 1 to remove) and `fm-winout` (the Windows OLE drag source, `unsafe` confined to `ole.rs`).
+2. **No `unsafe` in our code.** `unsafe_code = "forbid"` workspace-wide. No FFI: the SMB backend is the pure-Rust `smb` crate. Exceptions: `fm-wayland` (two `unsafe` calls adopting winit's Wayland display; roadmap priority 1 to remove) `fm-winout` (the Windows OLE drag source, `unsafe` confined to `ole.rs`) and `fm-winsec` (Windows owner/group/DACL read and write for file attributes, `unsafe` confined to `sd.rs`; descriptors are size-capped, validated in safe code first and treated as opaque blobs).
 3. **Everything user-visible is a command.** New behaviour = a `CommandSpec` in `crates/engine/src/*_cmds.rs`, registered in `commands.rs`, with id, label, menu path, shortcut, params doc, `enabled` and `run`, plus tests. The UI never performs file operations directly.
 4. **The UI is thin.** `crates/ui` holds widgets and view state only. It reads `Session` state and dispatches commands; no `std::fs` calls, no job spawning.
 5. **The UI thread never blocks on I/O.** Every filesystem call runs on a worker (see §7). A 40 GiB copy across a slow SMB link must not drop a frame.
@@ -66,7 +66,7 @@ docs/  AGENTS.md  openspec/  log/devlog.md
 
 Dependency direction in one line: **`vfs` knows nothing, backends know `vfs`, `ops` knows backends only through `Vfs`, `engine` orchestrates, `ui` observes `engine`, `fm-app` wires them.**
 
-### Shared audio foundation (`add-media-pane`, in progress)
+### Shared audio foundation (`add-media-pane`, archived 2026-11-15)
 
 `fm-media` (L1) decodes local audio with Symphonia on a dedicated worker and
 outputs through cpal's safe API. Native FFI inside cpal and ALSA development
@@ -430,6 +430,7 @@ UI thread (eframe)                 engine workers                backends
 ```
 
 - **Lanes, not a shared pool:** `local` (4 threads), `smb` (2 threads), `sftp` (2 threads). A hung share blocks only the `smb` lane.
+- **Walks off the lanes:** Find Files and Properties folder sizes walk on a thread of their own (one thread for SFTP and SMB, up to 8 for native local), never on a job lane, so a long walk never delays directory reads or file jobs, and a hung server blocks only that walk. SMB shares are walked this way too: the SMB backend opens and closes a handle per call, so one extra sequential reader next to the two lane workers is safe.
 - **Channels:** `crossbeam-channel` for job submission/events. The UI drains job events once per frame (`Session::poll()`), applies them to `Session`, then repaints if anything changed. Workers never touch egui.
 - **Read lane in use today:** directory reads (`ensure_read/submit_read/refresh_read`) run on the scheme's lane; the worker calls `Vfs::read_dir` and *stages* a `ReadOutcome` (entries or error) into the session inbox — only `poll()` writes the `DirCache`. One in-flight read per uri (dedup), `refresh_read` invalidates then re-reads.
 - **File jobs (landed, change 3):** `engine::fileops` holds a jobs table (`OpJob { id, label, state, progress, conflict, summary }`). `Session::submit_op(OpRequest)` queues a copy/move/trash/delete/mkdir/rename/undo job on the source's lane; the worker throttles progress (30 ms) into shared state and `poll()` copies it into the table — the UI never waits. Cancel is an `Arc<AtomicBool>` checked between chunks.
@@ -438,6 +439,7 @@ UI thread (eframe)                 engine workers                backends
 - **UI contract:** dialogs and the Activity panel (`fm-ui::dialogs`, `fm-ui::jobs`) only dispatch command ids; dispatch failures set `Session::notice`, which `fm-ui::jobs::show` moves into the bounded `Session::messages` log (`engine::messages`, command `messages.clear`). A new message opens the Activity panel for 5 seconds (kept open while hovered); the status-bar icon (`jobs::icon_button`) reopens it. Short confirmations still use `Session::info` in the status bar.
 - **Thumbnails (`thumbnails-and-open`):** `engine::thumbs::ThumbService` owns its own pool (≤ 4 workers, *not* a job lane — a folder of images must not queue behind file copies) and a per-pane generation counter. The grid reports the visible window (`preview.thumbs.visible`); the engine queues visible entries, then one screenful after and one before, and drops results whose generation is stale. Decoded RGBA lives in a 128 MiB LRU (configurable, `thumb_memory_mib`); PNGs go to `<cache>/thumbs` (cache parent configurable via `thumb_cache_dir`; 256 MiB default cap, configurable; `0600`/`0700`, temp + rename). Only `file://` entries are thumbnailed.
 - **Markdown images (`markdown-images`):** `engine::md_images::MdImageService` has two small pools (local, net; 2 workers each, not job lanes) and a 256 MiB / 256-entry LRU keyed by (document, mtime, url). The Markdown preview reports the image URLs it needs (`preview.md_images.want`); relative paths resolve like `preview.open_link` and load through the document's `Vfs`. Remote http(s) loads only with `preview_remote_images` and uses a DNS guard that refuses non-public addresses, ≤ 3 revalidated redirects, a 10 s timeout and an 8 MiB cap. SVG is rasterized by `fm-preview::svg` (resvg, no text, no external resources).
+- **Mermaid diagrams (`markdown-mermaid`):** `engine::md_diagrams::MdDiagramService` has one worker thread (not a job lane), at most 32 queued jobs and a 64 MiB / 256-entry LRU keyed by (source hash, palette hash, scale step of 0.25). The Markdown preview reports the Mermaid code blocks it shows (`preview.md_diagrams.want {blocks, palette, scale}`); a pane that moves to another document drops its queued jobs and cancels a running one. `fm_preview::mermaid::render` runs `merman` (resvg-safe SVG, palette as Mermaid `base` theme variables, document theme keys locked, 64 KiB source, 2 s deadline, 8 MiB SVG, panics caught) and rasterizes through `svg::rasterize_scaled`; labels are measured and drawn with the bundled Atkinson Hyperlegible, whose files live in `crates/preview/assets/fonts`. The palette comes from `fm-ui` `Tokens` as validated `#rrggbb` strings. A finished diagram wakes the UI through the service's waker.
 - **Markdown HTML subset (`markdown-html-subset`):** `fm-preview::markdown::html` is a tolerant tokenizer/builder (allow-listed tags and attributes, 256 KiB per block, depth 32, `script`/`style` dropped) that lowers HTML blocks and inline HTML into the normal model: `MdBlock::Centered`, `MdImage.dark_url`/`width`, headerless `Table`s. `<picture>` keeps both URLs; the UI picks `url_for(tokens.dark)`, so only the visible image is requested.
 
 - **Walkers outside the lanes:** Properties folder sizes (`props_cmds`, thread `fm-props`), Find Files (`search_cmds`, `fm-search`), the Open With application scan (`openwith_cmds`, `fm-apps`) and Media subtitle discovery/extraction (`media_subtitle_cmds`, `fm-subtitles`; extracting an embedded track reads the whole container) run on their own short-lived threads so a long walk never queues behind file jobs. Each publishes into a `Mutex` the UI reads every frame and stops on an `AtomicBool` set by its owner's `Drop` (closing the window cancels the walk; minimising a search to the Activity panel keeps it running). On a native local filesystem Find Files walks with up to 8 threads over `std::fs::read_dir`, reads file types from the directory entry and stats only matches; content search uses `memchr::memmem`. Other backends keep the single-threaded `Vfs` walker. A search of `/` skips pseudo-filesystems (`/proc`, `/sys`, `/dev`, `/run`; macOS system volumes). Walks never follow symlinks, are capped (5 M entries / depth 256 for sizes; 10 k results, depth 64 and 64 MiB read per file for search) and skip SMB, which must stay on its lane.
@@ -689,6 +691,14 @@ only visible rows with independent text clips per column. Measured line widths
 are cached as rows are visited, keyed by document/font/mode; widths never feed
 back into pane sizing. Unified diffs use the same virtualized scrolling.
 
+## 12b. Folder synchronization (`add-file-sync`)
+
+The path picker (`add-path-picker`) is a shared in-app chooser: `Session::picker` (`engine/src/picker_cmds.rs`, `picker.open/navigate/select/accept/cancel`) lists folders through `DirCache` like any pane; `fm_ui::picker` only dispatches. A purpose string routes the result: `sync.left`/`sync.right` are applied to the sync profile by the engine, any other purpose lands in `Session::picked` for the dialog that asked (`dialog.subtitle`, `dialog.playlist`, `dialog.destination`).
+
+`fm-sync` (L1) is a pure library: `compare()` validates a `Profile`, scans both sides (bounded, cancellable), loads the two-way snapshot and builds a `Plan` (one `Item` per path with a `Status` and an overridable `Action`); `run()` executes it through the `fm-ops` copy pipeline, applies attributes (`Vfs::set_attrs`, see the attribute layer in `fm-vfs`), honours the `DeletePolicy` and the deletion `Guards`, and records the snapshot only for verified paths.
+
+`engine::sync_hub` owns the profiles (`sync-profiles.json`, owner-only, no secrets), per-profile `SyncState` and one scan/run thread each (at most four at once). Only `Session::poll()` → `pump_sync()` applies results. The watcher marks a profile dirty from debounced `notify` events (local sides) or a poll interval (remote sides, at least 10 s); it starts a single follow-up compare and auto-applies only a plan without conflicts, permanent deletes or tripped safeguards. `sync_cmds.rs` exposes `sync.open/close/minimize/restore/compare/run/cancel/set_action/filter/sort/confirm.dismiss/watch.start/watch.confirm/watch.cancel/watch.stop`, `sync.profile.*` and `sync.watch.*`; `sync_wizard_cmds.rs` adds `sync.view` (wizard/advanced) and `sync.wizard.go` (steps 0–6, the review compares), rendered by `fm_ui::sync_wizard`; `fm_ui::sync` renders the window and dispatches those ids only; `fm_ui::sync::activity` feeds the Activity panel cards and the status-bar text for minimized, running and watching syncs, and `SyncHub::wake` keeps frames flowing while one is watching.
+
 ## 13. Change history
 
 | Date | Change |
@@ -763,7 +773,7 @@ including nested blocks and explicitly targeted multi-file cards, and publishes
 only the code through the clipboard outbox. UI labels/tooltips are never part of
 the Markdown export or selectable text.
 Document-only Atkinson Hyperlegible regular/bold faces are bundled under the SIL
-Open Font License in `crates/ui/assets/fonts/OFL.txt`; named font families leave
+Open Font License in `crates/preview/assets/fonts/OFL.txt`; named font families leave
 the application's normal UI/terminal faces unchanged.
 
 `PreviewSlot::scale` holds pane-local 50%-400% content magnification, independent

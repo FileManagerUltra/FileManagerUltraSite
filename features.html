@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Features – FileManagerUltra</title>
-  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, and themes.">
+  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, folder sync and themes.">
+  <link rel="canonical" href="https://filemanagerultra.com/features.html">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
@@ -20,6 +21,7 @@
       <nav aria-label="Main">
         <a href="features.html" aria-current="page">Features</a>
         <a href="features.html#media">Media</a>
+        <a href="sync.html">Sync</a>
         <a href="install.html">Install</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
@@ -43,6 +45,7 @@
           <a href="#media">Media</a>
           <a href="#ai">Terminal &amp; AI</a>
           <a href="#remote">SFTP &amp; SMB</a>
+          <a href="#sync">Folder sync</a>
           <a href="#accents">Themes</a>
         </nav>
       </div>
@@ -69,7 +72,7 @@
           <div class="feature">
             <div class="text">
               <h3>Markdown that reads like a document</h3>
-              <p>Nested lists, task lists, aligned tables and code blocks with per-block copy buttons. Zoom a preview from 50% to 400% and search with Ctrl+F.</p>
+              <p>Nested lists, task lists, aligned tables and code blocks with per-block copy buttons. Mermaid code blocks are drawn as diagrams in the app's colours, offline. Zoom a preview from 50% to 400% and search with Ctrl+F.</p>
               <p>Images next to the document show inline, and the common HTML in READMEs (centered headings, sized images, <code>&lt;picture&gt;</code> for dark and light) renders too. Remote images load only when you allow them.</p>
             </div>
             <figure class="shot">
@@ -272,7 +275,26 @@
       </div>
     </section>
 
-    <section id="accents">
+    <section id="sync">
+      <div class="wrap">
+        <div class="feature">
+          <div class="text">
+            <h2>Synchronize folders</h2>
+            <p>File ▸ Synchronize Folders compares the folder you highlighted with another one, local, on a network share or on an SFTP server, and lists every copy and delete in a folder tree before anything changes.</p>
+            <p>Update copies new and changed files, Mirror makes an exact copy, Two-way merges both ways and leaves conflicts to you. A guided setup asks a few questions; the Advanced view has every option on one page. Save a sync to run it again, or keep the folders in sync while the app is open. New in 0.3.0.</p>
+            <p><a href="sync.html">More about Synchronize Folders</a></p>
+          </div>
+          <figure class="shot">
+            <picture>
+              <source srcset="assets/screens/sync-advanced-light.webp" media="(prefers-color-scheme: dark)">
+              <img src="assets/screens/sync-advanced-dark.webp" width="1440" height="900" loading="lazy" alt="The Advanced sync view on one page: left and right folders with Browse buttons and a swap button, then Goal set to Merge both ways, Deleting set to Move to trash, Compare by Size and date, Leave out Thumbs.db and .DS_Store, and a Keep in sync checkbox, above the comparison list and its summary: 18 to the right, 8 to the left, 4 conflicts.">
+            </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="accents" class="alt">
       <div class="wrap">
         <h2>Make it yours</h2>
         <p class="sub">Light or dark, with an accent colour of your choice: pick one of the presets in Preferences &#9656; Appearance, or enter a custom #rrggbb value. Default restores the theme colour.</p>

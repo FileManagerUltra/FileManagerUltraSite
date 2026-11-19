@@ -30,12 +30,14 @@ What is already done on `main` but not released yet is listed under `[Unreleased
 - **Better search.** Builds on the existing Find Files window: regular expressions,
   include/exclude filters, search on SFTP/SMB, results you can open at the matching
   line, and search-and-replace across files.
+- **More previews.** A PDF view where you can fill in forms and sign (not a full PDF
+  editor), a CSV/TSV table view, and diagram previews for draw.io and Dia files.
+- **Feature walkthrough.** A quick tour with balloons that shows off several features
+  using built-in examples, so it never changes any of your files.
 
 ## Later
 
 - **Batch rename** with a before/after preview and safe handling of collisions.
-- **File synchronization**: compare two folders, review a plan of copies, updates and
-  deletions, then run it (one-way, mirror, two-way; saved folder-pair profiles).
 - **Archives**: browse and extract zip/tar as folders.
 - **Pane-layout restore policy** at startup: yes / no / ask, set in Preferences.
 - **Automation**: CLI / control channel on top of the command registry.

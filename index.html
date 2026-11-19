@@ -4,7 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FileManagerUltra – a multi-pane file manager written in Rust</title>
-  <meta name="description" content="FileManagerUltra is a cross-platform multi-pane file manager written in Rust with a native UI: unlimited split panes, local, SMB and SFTP, background jobs, terminal panes, a media player, rich previews and Git status.">
+  <meta name="description" content="FileManagerUltra is a free, open-source multi-pane file manager for Linux, macOS and Windows, written in Rust: split panes, SMB and SFTP, folder sync, terminal panes, a media player, rich previews and Git status.">
+  <link rel="canonical" href="https://filemanagerultra.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FileManagerUltra">
+  <meta property="og:title" content="FileManagerUltra – a multi-pane file manager written in Rust">
+  <meta property="og:description" content="Free, open-source file manager for Linux, macOS and Windows: unlimited split panes, SMB and SFTP, folder sync, terminals, media and previews.">
+  <meta property="og:url" content="https://filemanagerultra.com/">
+  <meta property="og:image" content="https://filemanagerultra.com/assets/screens/hero-dark.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "FileManagerUltra",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "softwareVersion": "0.3.0",
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "url": "https://filemanagerultra.com/",
+    "downloadUrl": "https://github.com/FileManagerUltra/FileManagerUltra/releases",
+    "screenshot": "https://filemanagerultra.com/assets/screens/hero-dark.webp",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "A cross-platform multi-pane file manager written in Rust with a native UI: unlimited split panes, local, SMB and SFTP folders, folder synchronization, terminal panes, a media player, rich previews and Git status."
+  }
+  </script>
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
@@ -29,6 +53,7 @@
       <nav aria-label="Main">
         <a href="features.html">Features</a>
         <a href="features.html#media">Media</a>
+        <a href="sync.html">Sync</a>
         <a href="install.html">Install</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
@@ -86,6 +111,7 @@
           <div class="card"><h3>Local, SMB and SFTP</h3><p>Local drives, mounted shares, in-app SMB and SSH/SFTP all behind one virtual filesystem, so every pane feature works across them. <a href="features.html#remote">See remote panes</a></p></div>
           <div class="card"><h3>Drag &amp; drop</h3><p>Drop onto a tree node or the listing; hold Ctrl to copy, Shift to move. On Linux and Windows, drag files out into a browser upload field, mail or chat window.</p></div>
           <div class="card"><h3>Background jobs</h3><p>File operations run as jobs with progress, conflict handling and cancel, so the UI never blocks. Jobs, messages and tips gather in the Activity panel.</p></div>
+          <div class="card"><h3>Folder sync</h3><p>Compare two folders, local or remote, review every copy and delete, then Update, Mirror or Two-way sync. Keep them in sync while the app is open. <a href="sync.html">See Synchronize Folders</a></p></div>
           <div class="card"><h3>Trash with undo</h3><p>Deleted items go to the trash and can be restored with undo. Directory listings update live.</p></div>
           <div class="card"><h3>Workspaces</h3><p>Keep different layouts for different workflows in tabs, save them, and open them again later. Ctrl+Tab jumps back to the tab you used before. Up to 10 workspaces persist.</p></div>
           <div class="card"><h3>Commander shortcuts</h3><p>F5–F8 for copy, move, new folder and delete; Tab swaps panes. Everything is a command, and Preferences works from the keyboard alone.</p></div>
@@ -93,7 +119,7 @@
           <div class="card"><h3>Media pane</h3><p>Audio and video from local drives, SFTP and SMB with a queue, playlist folders, gapless playback, a ten-band equalizer, subtitles and DVD images. Double-click a media file to play it right here, if you like. <a href="features.html#media">See Media</a></p></div>
           <div class="card"><h3>Audiobooks</h3><p>Chapters, skip back/forward, bookmarks and a seek bar that spans a whole book, even across many files. Media remembers where you stopped.</p></div>
           <div class="card"><h3>Find Files</h3><p>Ctrl+F searches the current folder, Ctrl+Shift+F all local drives, by name or content. Minimise a long search to the Activity panel and keep working; recent searches are one click away.</p></div>
-          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks, images and syntax-highlighted code; images, camera RAW photos and SVG with thumbnails; logs with filters and live tail. <a href="features.html#previews">See previews</a></p></div>
+          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks, images, Mermaid diagrams and syntax-highlighted code; images, camera RAW photos and SVG with thumbnails; logs with filters and live tail. <a href="features.html#previews">See previews</a></p></div>
           <div class="card"><h3>Git aware</h3><p>Status in listings and tree, plus a diff view against HEAD or any branch or tag. Read-only, pure-Rust <code>gix</code>.</p></div>
           <div class="card"><h3>Dark and light themes</h3><p>Switch themes with Ctrl+Shift+T and pick an accent colour. Local file times use your operating system's timezone. <a href="features.html#accents">See themes</a></p></div>
         </div>
@@ -101,7 +127,27 @@
       </div>
     </section>
 
-    <section id="media-teaser" class="alt">
+    <section id="sync-teaser" class="alt">
+      <div class="wrap">
+        <div class="feature">
+          <div class="text">
+            <p class="eyebrow">New in 0.3</p>
+            <h2>Synchronize folders, safely</h2>
+            <p>Keep a backup disk, a NAS share or an SFTP server in step with a folder on your computer. A guided setup asks a few plain questions, compares both sides and shows every file it would copy or delete before anything happens.</p>
+            <p>Choose Update, Mirror or Two-way, change any item's action, leave out what you don't need, and optionally keep the folders in sync while the app is open. Deletes go to the trash, and permanent ones ask first.</p>
+            <p><a href="sync.html">More about Synchronize Folders</a></p>
+          </div>
+          <figure class="shot">
+            <picture>
+              <source srcset="assets/screens/sync-review-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="assets/screens/sync-review-light.webp" width="1440" height="900" loading="lazy" alt="The guided sync setup on its last step, Review: a Photos folder on the left and Backup/Photos on the right, with the files that will be copied marked by green arrows and the summary: 22 to the right, 8 deleted on right, 36 equal, 44.4 MiB. Below it, Name and save this sync and the button Start: synchronize now.">
+            </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="media-teaser">
       <div class="wrap">
         <div class="feature">
           <div class="text">
@@ -121,7 +167,7 @@
       </div>
     </section>
 
-    <section id="get">
+    <section id="get" class="alt">
       <div class="wrap center">
         <h2>Try it</h2>
         <p class="sub">Installers for Windows, macOS and Linux are on the GitHub Releases page. FileManagerUltra is in beta and free under the Apache License 2.0. Sponsoring helps pay for signed installers.</p>

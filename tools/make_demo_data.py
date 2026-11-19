@@ -185,6 +185,36 @@ for i in range(1, 9):
 for rc in (".bashrc", ".bash_profile"):
     put(rc, "PS1='demo $ '\n", 30)
 
+# --- Sync: Photos and an older backup of it in Backup/Photos ----------------------
+# Synchronize Folders screenshots compare these two. Their own random generator keeps
+# the rest of the demo home byte-for-byte the same.
+srng = random.Random(11)
+
+
+def photo_pair(album, names, days_ago, both=True, size=None):
+    for name in names:
+        n = size or srng.randint(900_000, 3_400_000)
+        data = srng.randbytes(n)
+        put(f"Photos/{album}/{name}", data, days_ago)
+        if both:
+            put(f"Backup/Photos/{album}/{name}", data, days_ago)
+
+
+photo_pair("2025 Summer Lake", [f"IMG_{i}.jpg" for i in range(1001, 1015)], 120)
+photo_pair("Family", [f"IMG_{i:04d}.jpg" for i in range(801, 810)], 60)
+photo_pair("2026 Iceland", [f"IMG_{i}.jpg" for i in range(2201, 2211)], 30)
+photo_pair("2026 Iceland", [f"IMG_{i}.jpg" for i in range(2211, 2225)], 3, both=False)  # new
+photo_pair("Screenshots", [f"Screenshot 2026-11-{d:02d}.png" for d in (2, 9, 14)], 2, both=False)
+for name in ("IMG_2203-edit.jpg", "IMG_2207-edit.jpg", "IMG_2215-edit.jpg"):  # edited on both sides
+    put(f"Backup/Photos/2026 Iceland/Edited/{name}", srng.randbytes(srng.randint(1_500_000, 2_500_000)), 20)
+    put(f"Photos/2026 Iceland/Edited/{name}", srng.randbytes(srng.randint(1_500_000, 2_500_000)), 1)
+put("Backup/Photos/Family/IMG_0803.jpg", srng.randbytes(1_800_000), 10)  # newer in the backup
+put("Backup/Photos/Family/IMG_0805 (1).jpg", srng.randbytes(2_100_000), 58)  # only in the backup
+for i in range(1, 7):  # a folder that was removed from Photos
+    put(f"Backup/Photos/Old phone/DSC_{i:04d}.jpg", srng.randbytes(srng.randint(600_000, 1_400_000)), 400)
+put("Photos/2026 Iceland/Thumbs.db", srng.randbytes(24_000), 3)
+put("Photos/Family/.DS_Store", srng.randbytes(6_148), 60)
+
 # --- Media: real, playable files generated with ffmpeg ---------------------------
 # Invented artists, albums and books; the audio is synthesised chords and the
 # video is an ffmpeg test source, so nothing here is copyrighted or personal.

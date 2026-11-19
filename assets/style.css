@@ -218,3 +218,13 @@ h2 .tag { font-size: .8rem; }
 
 /* Roadmap page: last-updated line under the page heading */
 .page-head .updated { margin: -.8rem 0 1.4rem; color: var(--muted); font-size: .9rem; }
+
+/* Sync page: questions and answers */
+.faq { display: grid; gap: .6rem; max-width: 52rem; }
+.faq details { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-alt); padding: .2rem 1.1rem; }
+section.alt .faq details { background: var(--bg); }
+.faq summary { cursor: pointer; font-weight: 600; padding: .6rem 0; }
+.faq summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.faq details p { margin: 0 0 .8rem; color: var(--muted); }
+.grid.spaced { margin-top: 2.5rem; }
+.feature.spaced { margin-top: 2.5rem; }

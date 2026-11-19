@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Install – FileManagerUltra</title>
   <meta name="description" content="Install FileManagerUltra on Windows, macOS or Linux, or build it from source. Notes on ffmpeg for video, and the project status.">
+  <link rel="canonical" href="https://filemanagerultra.com/install.html">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
@@ -20,6 +21,7 @@
       <nav aria-label="Main">
         <a href="features.html">Features</a>
         <a href="features.html#media">Media</a>
+        <a href="sync.html">Sync</a>
         <a href="install.html" aria-current="page">Install</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="https://github.com/FileManagerUltra/FileManagerUltra/blob/main/CHANGELOG.md">Changelog</a>
@@ -39,9 +41,9 @@
         <h1>Install</h1>
         <p class="sub">Installers are attached to each <a href="https://github.com/FileManagerUltra/FileManagerUltra/releases">GitHub Release</a>. Download the file for your system from the latest release.</p>
         <aside class="notice" aria-labelledby="unsigned-title">
-          <h2 id="unsigned-title">Installers are not signed yet</h2>
-          <p>The installers are not code-signed or certified: there is no Windows code-signing certificate and no Apple notarization yet. Windows SmartScreen and macOS Gatekeeper will warn you on first start; the steps below show how to continue. Download only from the GitHub Releases page.</p>
-          <p>Signing certificates cost money every year. If you'd like to help make signed installers happen, <a href="https://github.com/sponsors/FileManagerUltra">sponsor FileManagerUltra on GitHub</a>. Donations are very welcome.</p>
+          <h2 id="unsigned-title">The Windows installer is not signed yet</h2>
+          <p>Since 0.3.0 the macOS app and disk image are signed with an Apple Developer ID and notarized by Apple, so they open without Gatekeeper warnings. The Windows installer is not code-signed yet, so Windows SmartScreen will warn you on first start; the steps below show how to continue. Download only from the GitHub Releases page.</p>
+          <p>Signing costs money every year. If you'd like to help, <a href="https://github.com/sponsors/FileManagerUltra">sponsor FileManagerUltra on GitHub</a>. Donations are very welcome.</p>
         </aside>
         <div class="platforms">
           <div class="card">
@@ -55,10 +57,10 @@
           <div class="card">
             <h3>macOS (Apple silicon)</h3>
             <ol>
-              <li>Clear the quarantine flag, open the <code>.dmg</code> and drag the app to Applications.</li>
-              <li>On first start, right-click the app and choose <strong>Open</strong>.</li>
+              <li>Open the <code>.dmg</code> and drag the app to Applications.</li>
+              <li>Start it from Applications or Launchpad and confirm the usual "downloaded from the Internet" question.</li>
             </ol>
-            <pre><code>xattr -d com.apple.quarantine ~/Downloads/FileManagerUltra_*.dmg</code></pre>
+            <p>Upgrading from a version before 0.3.0? The app has a new identifier, so macOS asks once more for folder permissions you had granted. Your settings are kept.</p>
           </div>
           <div class="card">
             <h3>Linux (x64)</h3>
@@ -104,7 +106,7 @@
     <section id="status">
       <div class="wrap">
         <h2>Status</h2>
-        <p class="sub">FileManagerUltra is in <strong>beta</strong> (latest release 0.2.3): core features work, but expect rough edges and changes between releases. Features marked <em>Next release</em> are on <code>main</code> and not in a release yet. See the <a href="roadmap.html">roadmap</a> for what is planned. Follow along, report issues or contribute on GitHub.</p>
+        <p class="sub">FileManagerUltra is in <strong>beta</strong> (latest release 0.3.0): core features work, but expect rough edges and changes between releases. Features marked <em>Next release</em> are on <code>main</code> and not in a release yet. See the <a href="roadmap.html">roadmap</a> for what is planned. Follow along, report issues or contribute on GitHub.</p>
         <p>Reporting a crash or high memory use? Turn on Preferences ▸ Advanced ▸ Troubleshooting ▸ Write diagnostic log. It records the app's memory use and what it was doing, never file, folder or server names or passwords; Help ▸ Open log folder shows the logs.</p>
         <div class="cta" style="justify-content:flex-start">
           <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/releases">Releases</a>
