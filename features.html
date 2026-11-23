@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Features – FileManagerUltra</title>
-  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, folder sync and themes.">
+  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, PDF Fill &amp; Sign, CSV tables, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, folder sync and themes.">
   <link rel="canonical" href="https://filemanagerultra.com/features.html">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -42,6 +42,7 @@
         <p class="sub">Screenshots come straight from the app. Most match the page theme, and a few show the other one, so you see both. The Auto / Light / Dark switch at the top changes the page and its screenshots; click any screenshot to enlarge it.</p>
         <nav class="subnav" aria-label="On this page">
           <a href="#previews">Previews &amp; Git</a>
+          <a href="#pdf">PDF &amp; CSV</a>
           <a href="#media">Media</a>
           <a href="#ai">Terminal &amp; AI</a>
           <a href="#remote">SFTP &amp; SMB</a>
@@ -54,7 +55,7 @@
     <section id="previews">
       <div class="wrap">
         <h2>Previews, Git and terminals</h2>
-        <p class="sub">Modified files, documents, images and logs open in a Preview pane next to the listing, and a terminal is one split away.</p>
+        <p class="sub">Modified files, documents, PDFs, tables, images and logs open in a Preview pane next to the listing, and a terminal is one split away.</p>
         <div class="showcase">
           <div class="feature">
             <div class="text">
@@ -87,7 +88,7 @@
               <h3>Images and thumbnails</h3>
               <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder. Photos from phones and cameras appear upright, and Rotate left and Rotate right turn the view without changing the file.</p>
               <p>Camera RAW photos (DNG, CR2, NEF, ARW and similar) show the picture the camera stored inside them. SVG drawings show as pictures with Fit and 100% and a choice of background behind transparent parts; turn Preview off to read the source.</p>
-              <p>Right-click an image and choose Copy Image to paste the full-size original into a browser or editor.</p>
+              <p>Large photos stay sharp at 100% and when zoomed in; click and drag to move around a picture that is bigger than the pane. Right-click an image and choose Copy Image to paste the full-size original into a browser or editor.</p>
             </div>
             <figure class="shot">
               <picture>
@@ -108,11 +109,39 @@
               </picture>
             </figure>
           </div>
+          <div class="feature" id="pdf">
+            <div class="text">
+              <h3>PDFs you can fill in and sign</h3>
+              <p>PDFs open in the Preview pane with continuous pages, bookmarks, working links, Find and text selection. Fit the width or the page, or show dark pages or high contrast for easier reading; the file itself is not changed.</p>
+              <p>Fill &amp; Sign fills in form fields (text, checkboxes, radio buttons and lists) and adds a drawn, typed or image signature, or a digital signature with a <code>.p12</code>/<code>.pfx</code> certificate. Nothing is written until you save: Save copy puts &ldquo;&hellip; (filled).pdf&rdquo; next to the original, or use Save as or Replace. It is not a full PDF editor.</p>
+              <p>Signed PDFs show whether each signature is intact, changed after signing or broken, with the signer, time and reason, and explain why a signature is broken. New in 0.3.1.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/pdf-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/pdf-dark.webp" width="1440" height="900" loading="lazy" alt="A Documents folder next to a PDF application form in the Preview pane, filled in with a name, address, plot size and ticked checkboxes, and a handwritten-style signature placed in the Signature field. A column of Fill &amp; Sign buttons on the right: Signature, Place, Remember, Reset, Save copy, Save as, Replace and Discard.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature" id="csv">
+            <div class="text">
+              <h3>CSV and TSV as a table</h3>
+              <p>A fixed header row, row numbers and columns you can resize. Click a header to sort, Shift+click to add a second column; numbers sort by value. Filter rows by text in all columns or one, optionally as a regular expression, or add conditions such as &ldquo;greater than&rdquo; or &ldquo;is empty&rdquo; from a column's menu.</p>
+              <p>The Record panel shows the selected row with every value in full. Copy a cell, a row or the column names, go to a row number and hide columns you don't need. The delimiter and header row are detected automatically.</p>
+              <p>Files of several gigabytes open straight away and keep loading in the background, also on SFTP and network shares. New in 0.3.2.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/csv-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/csv-light.webp" width="1440" height="900" loading="lazy" alt="An orders CSV file shown as a table, sorted by total and filtered to rows whose status is delivered: 2,249 of 4,000 rows. The Record panel on the right shows the selected row in full, including the note: Box arrived with a dented corner; the product itself was fine, customer kept it.">
+              </picture>
+            </figure>
+          </div>
           <div class="feature">
             <div class="text">
               <h3>Terminals are just panes</h3>
               <p>Put a terminal beside your files. Hold Shift for local selection and scrolling when an application captures the mouse.</p>
-              <p>Each terminal has its own zoom (Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0), and so does every Files, Network, SFTP, Trash and Media pane, from the zoom button in its header. The zoom is saved with the workspace.</p>
+              <p>Each terminal has its own zoom (Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0, or Ctrl and the mouse wheel), and so does every Files, Network, SFTP, Trash and Media pane, from the zoom button in its header. The zoom is saved with the workspace, and terminals in a saved workspace reopen in the folder they were in.</p>
             </div>
             <figure class="shot">
               <picture>

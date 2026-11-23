@@ -109,7 +109,146 @@ put("Documents/budget-2026.csv", "month,income,spend\n" + "\n".join(
     f"{m},{3000 + rng.randint(0, 400)},{2100 + rng.randint(0, 600)}" for m in
     ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]) + "\n", 20)
 put("Documents/notes.txt", "Remember to renew the passport.\nCall the landlord.\n", 12)
-put("Documents/contract.pdf", b"%PDF-1.4\n" + bytes(rng.getrandbits(8) for _ in range(40000)), 40)
+# The old placeholder used these random bytes; drawing them keeps the rest of the home unchanged.
+for _ in range(40000):
+    rng.getrandbits(8)
+
+
+def form_pdf():
+    """A one-page fillable PDF form (text fields, a list, checkboxes and a signature field)."""
+    W, H = 595, 842
+    text = []
+
+    def t(x, y, size, s, bold=False):
+        s = s.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
+        text.append(f"BT /{'F2' if bold else 'F1'} {size} Tf {x} {y} Td ({s}) Tj ET")
+
+    t(56, 770, 20, "Community Garden Plot Application", True)
+    t(56, 748, 10, "Greenfield Allotments, season 2027. Return by 31 January.")
+    text.append("0.2 0.45 0.3 RG 2 w 56 736 m 539 736 l S 0 G 0.6 w")
+    fields = []  # (name, kind, rect, extra)
+    y = 700
+    for label, name in [("Full name", "name"), ("Street and number", "street"),
+                        ("Postcode and town", "town"), ("Email", "email"), ("Phone", "phone")]:
+        t(56, y + 26, 10, label)
+        fields.append((name, "Tx", (56, y, 539, y + 22)))
+        y -= 52
+    t(56, y + 26, 10, "Plot size")
+    fields.append(("plot", "Ch", (56, y, 260, y + 22)))
+    t(300, y + 26, 10, "Preferred start date")
+    fields.append(("start", "Tx", (300, y, 539, y + 22)))
+    y -= 52
+    t(56, y + 26, 11, "Interests", True)
+    for i, (label, name) in enumerate([("Vegetables", "veg"), ("Flowers", "flowers"),
+                                      ("Fruit trees", "fruit"), ("Beekeeping", "bees")]):
+        x = 56 + i * 122
+        fields.append((name, "Btn", (x, y, x + 14, y + 14)))
+        text.append(f"0.55 0.6 0.58 RG 0.96 0.98 0.96 rg {x} {y} 14 14 re B 0 g")
+        t(x + 22, y + 3, 10, label)
+    y -= 50
+    t(56, y + 26, 10, "Anything we should know")
+    fields.append(("notes", "TxM", (56, y - 40, 539, y + 22)))
+    y -= 80
+    fields.append(("agree", "Btn", (56, y, 70, y + 14)))
+    text.append(f"0.55 0.6 0.58 RG 0.96 0.98 0.96 rg 56 {y} 14 14 re B 0 g")
+    t(78, y + 3, 10, "I have read the garden rules and will keep my plot tidy.")
+    y -= 110
+    t(56, y + 70, 10, "Signature")
+    fields.append(("signature", "Sig", (56, y, 300, y + 60)))
+    t(330, y + 70, 10, "Date")
+    fields.append(("date", "Tx", (330, y + 38, 539, y + 60)))
+    t(56, 60, 8, "Demo form made for FileManagerUltra screenshots. Not a real organisation.")
+
+    for _, kind, (x1, y1, x2, y2) in fields:  # field frames, for viewers that skip /MK
+        if kind != "Btn":
+            text.append(f"0.55 0.6 0.58 RG 0.96 0.98 0.96 rg {x1} {y1} {x2 - x1} {y2 - y1} re B 0 g")
+    objs = {}
+    objs[1] = "<< /Type /Catalog /Pages 2 0 R /AcroForm 5 0 R >>"
+    objs[2] = "<< /Type /Pages /Kids [3 0 R] /Count 1 >>"
+    fonts = "<< /F1 6 0 R /F2 7 0 R /Helv 6 0 R /ZaDb 8 0 R >>"
+    objs[6] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"
+    objs[7] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"
+    objs[8] = "<< /Type /Font /Subtype /Type1 /BaseFont /ZapfDingbats >>"
+    on = "q 0 g BT /ZaDb 12 Tf 1.5 2.5 Td (4) Tj ET Q"
+    objs[9] = f"<< /Type /XObject /Subtype /Form /BBox [0 0 14 14] /Resources << /Font {fonts} >> /Length {len(on)} >>\nstream\n{on}\nendstream"
+    objs[10] = "<< /Type /XObject /Subtype /Form /BBox [0 0 14 14] /Length 0 >>\nstream\n\nendstream"
+    annots = []
+    n = 11
+    for name, kind, (x1, y1, x2, y2) in fields:
+        common = (f"/Type /Annot /Subtype /Widget /P 3 0 R /T ({name}) /F 4 /Rect [{x1} {y1} {x2} {y2}] "
+                  "/MK << /BC [0.55 0.6 0.58] /BG [0.96 0.98 0.96] >> /BS << /W 1 /S /S >>")
+        if kind == "Tx":
+            d = f"<< {common} /FT /Tx /DA (/Helv 11 Tf 0 g) >>"
+        elif kind == "TxM":
+            d = f"<< {common} /FT /Tx /Ff 4096 /DA (/Helv 10 Tf 0 g) >>"
+        elif kind == "Ch":
+            d = (f"<< {common} /FT /Ch /Ff 131072 /DA (/Helv 11 Tf 0 g) "
+                 "/Opt [(Half plot, 50 m2) (Full plot, 100 m2) (Raised bed) (Shared greenhouse bench)] >>")
+        elif kind == "Btn":
+            d = (f"<< {common} /FT /Btn /V /Off /AS /Off /DA (/ZaDb 0 Tf 0 g) "
+                 "/AP << /N << /Yes 9 0 R /Off 10 0 R >> >> >>")
+        else:
+            d = f"<< {common} /FT /Sig >>"
+        objs[n] = d
+        annots.append(f"{n} 0 R")
+        n += 1
+    stream = "\n".join(text)
+    objs[4] = f"<< /Length {len(stream)} >>\nstream\n{stream}\nendstream"
+    objs[3] = (f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {W} {H}] /Contents 4 0 R "
+               f"/Resources << /Font {fonts} >> /Annots [{' '.join(annots)}] >>")
+    objs[5] = (f"<< /Fields [{' '.join(annots)}] /NeedAppearances true "
+               f"/DR << /Font {fonts} >> /DA (/Helv 0 Tf 0 g) >>")
+    out = bytearray(b"%PDF-1.7\n%\xe2\xe3\xcf\xd3\n")
+    offsets = {}
+    for k in sorted(objs):
+        offsets[k] = len(out)
+        out += f"{k} 0 obj\n{objs[k]}\nendobj\n".encode("latin-1")
+    xref = len(out)
+    out += f"xref\n0 {n}\n0000000000 65535 f \n".encode()
+    for k in range(1, n):
+        out += f"{offsets[k]:010d} 00000 n \n".encode()
+    out += f"trailer\n<< /Size {n} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
+    return bytes(out)
+
+
+put("Documents/garden-plot-application.pdf", form_pdf(), 2)
+
+
+def orders_csv():
+    """A few thousand orders, with long notes for the Record panel."""
+    r = random.Random(23)
+    cities = ["Amsterdam", "Utrecht", "Groningen", "Leiden", "Haarlem", "Delft", "Zwolle", "Breda",
+              "Arnhem", "Maastricht", "Eindhoven", "Nijmegen"]
+    first = ["Anna", "Bram", "Carmen", "Daan", "Eva", "Finn", "Gwen", "Hugo", "Iris", "Jasper", "Kim",
+             "Lars", "Mila", "Noah", "Olga", "Pim", "Rosa", "Sven", "Tess", "Vince"]
+    last = ["Bakker", "de Vries", "Jansen", "Visser", "Smit", "Meijer", "Mulder", "Bos", "Dekker",
+            "Peters", "Hendriks", "van Dijk"]
+    products = [("Desk lamp", 39.95), ("Notebook A5", 4.50), ("Fountain pen", 24.00),
+                ("Monitor arm", 89.00), ("Ergonomic chair", 249.00), ("USB-C hub", 34.99),
+                ("Standing desk", 459.00), ("Cable tray", 17.50), ("Desk mat", 21.00),
+                ("Webcam", 69.00), ("Headset", 79.95), ("Plant pot", 12.95)]
+    statuses = ["delivered"] * 6 + ["shipped"] * 2 + ["processing", "returned", "cancelled"]
+    notes = ["", "", "", "Leave at the back door if nobody answers.",
+             "Gift: please leave out the invoice and add a card that says Happy birthday.",
+             "Customer asked to combine this with the previous order to save on shipping costs.",
+             "Box arrived with a dented corner; the product itself was fine, customer kept it.",
+             "Deliver after 17:00 on weekdays. Third floor, the bell on the left does not work, call instead."]
+    rows = ["order_id,date,customer,city,product,qty,unit_price,total,status,notes"]
+    t0 = time.mktime((2026, 1, 1, 9, 0, 0, 0, 0, -1))
+    for i in range(4000):
+        when = time.strftime("%Y-%m-%d", time.localtime(t0 + i * 1.9 * 3600))
+        name = f"{r.choice(first)} {r.choice(last)}"
+        prod, price = r.choice(products)
+        qty = r.choice([1, 1, 1, 2, 2, 3, 4, 10])
+        note = r.choice(notes)
+        if "," in note:
+            note = '"' + note + '"'
+        rows.append(f"{10421 + i},{when},{name},{r.choice(cities)},{prod},{qty},{price:.2f},"
+                    f"{qty * price:.2f},{r.choice(statuses)},{note}")
+    return "\n".join(rows) + "\n"
+
+
+put("Documents/orders-2026.csv", orders_csv(), 1)
 put("Documents/archive-2025.zip", bytes(rng.getrandbits(8) for _ in range(250000)), 200)
 
 # --- Logs ---------------------------------------------------------------------

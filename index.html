@@ -20,7 +20,7 @@
     "name": "FileManagerUltra",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Linux, macOS, Windows",
-    "softwareVersion": "0.3.0",
+    "softwareVersion": "0.3.2",
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "url": "https://filemanagerultra.com/",
     "downloadUrl": "https://github.com/FileManagerUltra/FileManagerUltra/releases",
@@ -107,7 +107,7 @@
         <h2>Built for people who live in their files</h2>
         <p class="sub">Commander-style speed with a modern, native interface.</p>
         <div class="grid">
-          <div class="card"><h3>Unlimited split panes</h3><p>Split right or down as often as you like. Each pane has its own file tree, file listing and zoom.</p></div>
+          <div class="card"><h3>Unlimited split panes</h3><p>Split right or down as often as you like. Each pane has its own file tree, file listing and zoom, and Files panes have Back and Forward (the mouse buttons work too).</p></div>
           <div class="card"><h3>Local, SMB and SFTP</h3><p>Local drives, mounted shares, in-app SMB and SSH/SFTP all behind one virtual filesystem, so every pane feature works across them. <a href="features.html#remote">See remote panes</a></p></div>
           <div class="card"><h3>Drag &amp; drop</h3><p>Drop onto a tree node or the listing; hold Ctrl to copy, Shift to move. On Linux and Windows, drag files out into a browser upload field, mail or chat window.</p></div>
           <div class="card"><h3>Background jobs</h3><p>File operations run as jobs with progress, conflict handling and cancel, so the UI never blocks. Jobs, messages and tips gather in the Activity panel.</p></div>
@@ -119,7 +119,7 @@
           <div class="card"><h3>Media pane</h3><p>Audio and video from local drives, SFTP and SMB with a queue, playlist folders, gapless playback, a ten-band equalizer, subtitles and DVD images. Double-click a media file to play it right here, if you like. <a href="features.html#media">See Media</a></p></div>
           <div class="card"><h3>Audiobooks</h3><p>Chapters, skip back/forward, bookmarks and a seek bar that spans a whole book, even across many files. Media remembers where you stopped.</p></div>
           <div class="card"><h3>Find Files</h3><p>Ctrl+F searches the current folder, Ctrl+Shift+F all local drives, by name or content. Minimise a long search to the Activity panel and keep working; recent searches are one click away.</p></div>
-          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks, images, Mermaid diagrams and syntax-highlighted code; images, camera RAW photos and SVG with thumbnails; logs with filters and live tail. <a href="features.html#previews">See previews</a></p></div>
+          <div class="card"><h3>Rich previews</h3><p>Markdown with tables, tasks, images, Mermaid diagrams and syntax-highlighted code; PDFs you can fill in and sign; CSV/TSV tables; images, camera RAW photos and SVG with thumbnails; logs with filters and live tail. <a href="features.html#previews">See previews</a></p></div>
           <div class="card"><h3>Git aware</h3><p>Status in listings and tree, plus a diff view against HEAD or any branch or tag. Read-only, pure-Rust <code>gix</code>.</p></div>
           <div class="card"><h3>Dark and light themes</h3><p>Switch themes with Ctrl+Shift+T and pick an accent colour. Local file times use your operating system's timezone. <a href="features.html#accents">See themes</a></p></div>
         </div>
@@ -127,7 +127,27 @@
       </div>
     </section>
 
-    <section id="sync-teaser" class="alt">
+    <section id="pdf-teaser" class="alt">
+      <div class="wrap">
+        <div class="feature">
+          <div class="text">
+            <p class="eyebrow">New in 0.3.1 and 0.3.2</p>
+            <h2>Fill in and sign PDFs, sort and filter CSV</h2>
+            <p>PDFs open in the Preview pane. Fill &amp; Sign fills in forms and adds a drawn, typed or image signature, or a digital one with your certificate, and saves a filled copy next to the original. Signed PDFs show whether their signatures are still intact.</p>
+            <p>CSV and TSV files open as a table you can sort, filter and search, with a Record panel that shows a whole row at once. Files of several gigabytes stay quick, also over SFTP.</p>
+            <p><a href="features.html#pdf">More about PDF and CSV previews</a></p>
+          </div>
+          <figure class="shot">
+            <picture>
+              <source srcset="assets/screens/pdf-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="assets/screens/pdf-light.webp" width="1440" height="900" loading="lazy" alt="A Documents folder next to a PDF application form in the Preview pane, filled in with a name, address, plot size and ticked checkboxes, and a handwritten-style signature placed in the Signature field. A column of Fill &amp; Sign buttons on the right: Signature, Place, Remember, Reset, Save copy, Save as, Replace and Discard.">
+            </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="sync-teaser">
       <div class="wrap">
         <div class="feature">
           <div class="text">
@@ -147,7 +167,7 @@
       </div>
     </section>
 
-    <section id="media-teaser">
+    <section id="media-teaser" class="alt">
       <div class="wrap">
         <div class="feature">
           <div class="text">
@@ -167,7 +187,7 @@
       </div>
     </section>
 
-    <section id="get" class="alt">
+    <section id="get">
       <div class="wrap center">
         <h2>Try it</h2>
         <p class="sub">Installers for Windows, macOS and Linux are on the GitHub Releases page. FileManagerUltra is in beta and free under the Apache License 2.0. Sponsoring helps pay for signed installers.</p>
