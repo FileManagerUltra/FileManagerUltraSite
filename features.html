@@ -54,12 +54,12 @@
 
     <section id="previews">
       <div class="wrap">
-        <h2>Previews, Git and terminals</h2>
+        <h2><a class="self" href="#previews">Previews, Git and terminals</a></h2>
         <p class="sub">Modified files, documents, PDFs, tables, images and logs open in a Preview pane next to the listing, and a terminal is one split away.</p>
         <div class="showcase">
-          <div class="feature">
+          <div class="feature" id="git-diff">
             <div class="text">
-              <h3>Git diff in the Preview pane</h3>
+              <h3><a class="self" href="#git-diff">Git diff in the Preview pane</a></h3>
               <p>Modified files open as a side-by-side diff against HEAD or any branch or tag, with word highlights and F7 / Shift+F7 to jump between changes.</p>
               <p>Status letters and tinted names show what changed in the listing and the tree.</p>
             </div>
@@ -70,9 +70,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="markdown">
             <div class="text">
-              <h3>Markdown that reads like a document</h3>
+              <h3><a class="self" href="#markdown">Markdown that reads like a document</a></h3>
               <p>Nested lists, task lists, aligned tables and code blocks with per-block copy buttons. Mermaid code blocks are drawn as diagrams in the app's colours, offline. Zoom a preview from 50% to 400% and search with Ctrl+F.</p>
               <p>Images next to the document show inline, and the common HTML in READMEs (centered headings, sized images, <code>&lt;picture&gt;</code> for dark and light) renders too. Remote images load only when you allow them.</p>
             </div>
@@ -83,9 +83,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="images">
             <div class="text">
-              <h3>Images and thumbnails</h3>
+              <h3><a class="self" href="#images">Images and thumbnails</a></h3>
               <p>Preview an image next to the listing, or switch the preview to a thumbnail grid of the whole folder. Photos from phones and cameras appear upright, and Rotate left and Rotate right turn the view without changing the file.</p>
               <p>Camera RAW photos (DNG, CR2, NEF, ARW and similar) show the picture the camera stored inside them. SVG drawings show as pictures with Fit and 100% and a choice of background behind transparent parts; turn Preview off to read the source.</p>
               <p>Large photos stay sharp at 100% and when zoomed in; click and drag to move around a picture that is bigger than the pane. Right-click an image and choose Copy Image to paste the full-size original into a browser or editor.</p>
@@ -97,9 +97,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="logs">
             <div class="text">
-              <h3>Log previews with live tail</h3>
+              <h3><a class="self" href="#logs">Log previews with live tail</a></h3>
               <p>Severity filters, search and UTC time ranges from five minutes to seven days, or custom dates and times.</p>
             </div>
             <figure class="shot">
@@ -111,7 +111,7 @@
           </div>
           <div class="feature" id="pdf">
             <div class="text">
-              <h3>PDFs you can fill in and sign</h3>
+              <h3><a class="self" href="#pdf">PDFs you can fill in and sign</a></h3>
               <p>PDFs open in the Preview pane with continuous pages, bookmarks, working links, Find and text selection. Fit the width or the page, or show dark pages or high contrast for easier reading; the file itself is not changed.</p>
               <p>Fill &amp; Sign fills in form fields (text, checkboxes, radio buttons and lists) and adds a drawn, typed or image signature, or a digital signature with a <code>.p12</code>/<code>.pfx</code> certificate. Nothing is written until you save: Save copy puts &ldquo;&hellip; (filled).pdf&rdquo; next to the original, or use Save as or Replace. It is not a full PDF editor.</p>
               <p>Signed PDFs show whether each signature is intact, changed after signing or broken, with the signer, time and reason, and explain why a signature is broken. New in 0.3.1.</p>
@@ -125,7 +125,7 @@
           </div>
           <div class="feature" id="csv">
             <div class="text">
-              <h3>CSV and TSV as a table</h3>
+              <h3><a class="self" href="#csv">CSV and TSV as a table</a></h3>
               <p>A fixed header row, row numbers and columns you can resize. Click a header to sort, Shift+click to add a second column; numbers sort by value. Filter rows by text in all columns or one, optionally as a regular expression, or add conditions such as &ldquo;greater than&rdquo; or &ldquo;is empty&rdquo; from a column's menu.</p>
               <p>The Record panel shows the selected row with every value in full. Copy a cell, a row or the column names, go to a row number and hide columns you don't need. The delimiter and header row are detected automatically.</p>
               <p>Files of several gigabytes open straight away and keep loading in the background, also on SFTP and network shares. New in 0.3.2.</p>
@@ -137,9 +137,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="terminals">
             <div class="text">
-              <h3>Terminals are just panes</h3>
+              <h3><a class="self" href="#terminals">Terminals are just panes</a></h3>
               <p>Put a terminal beside your files. Hold Shift for local selection and scrolling when an application captures the mouse.</p>
               <p>Each terminal has its own zoom (Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0, or Ctrl and the mouse wheel), and so does every Files, Network, SFTP, Trash and Media pane, from the zoom button in its header. The zoom is saved with the workspace, and terminals in a saved workspace reopen in the folder they were in.</p>
             </div>
@@ -156,12 +156,12 @@
 
     <section id="media" class="alt">
       <div class="wrap">
-        <h2>Media</h2>
+        <h2><a class="self" href="#media">Media</a></h2>
         <p class="sub">A music, audiobook and video player that is just another pane. New in 0.2.0; media keys and audio speed arrived in 0.2.1, picture subtitles and hardware video decoding in 0.2.2.</p>
         <div class="showcase">
-          <div class="feature">
+          <div class="feature" id="playback">
             <div class="text">
-              <h3>Play from the files you are looking at</h3>
+              <h3><a class="self" href="#playback">Play from the files you are looking at</a></h3>
               <p>Drop files or whole folders on the player to play them right away, or on the playlist to add them exactly where the line shows. Play, Play next and Add to queue work from Files and Preview too. Each added folder becomes a playlist folder you can collapse, lock, rename and reorder by drag and drop.</p>
               <p>Gapless playback between tracks, shuffle and repeat, and playback that carries on in the background with Previous, Play/Pause, Next, volume and the playing time in the status bar. Import M3U, M3U8 and PLS playlists or save the queue as M3U8. Files on SFTP and SMB play too.</p>
               <p>Your keyboard's media keys work while you use other apps, and the system's media controls show the title, artist, album and cover art: the GNOME or KDE media widget, the Windows media overlay and macOS Now Playing.</p>
@@ -173,9 +173,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="play-here">
             <div class="text">
-              <h3>Your usual player, or right here</h3>
+              <h3><a class="self" href="#play-here">Your usual player, or right here</a></h3>
               <p>Double-clicking a song or video opens it in your default app, as always. The first time, a short tip in the Activity panel shows that it can play right here instead: <em>Play here now</em> for this file, <em>Always play here</em> to make it the default.</p>
               <p>Change your mind any time in Preferences ▸ Media ▸ Opening files, separately for audio and video. The tip shows only once and never interrupts you.</p>
             </div>
@@ -186,9 +186,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="player-menu">
             <div class="text">
-              <h3>Every player setting one right-click away</h3>
+              <h3><a class="self" href="#player-menu">Every player setting one right-click away</a></h3>
               <p>Right-click the video, the cover art or the now-playing area for play and pause, tracks, subtitles and their appearance, the equalizer, sleep timer, A-B loop, speed, fullscreen and Show in folder.</p>
               <p>Entries only appear when they apply: an audio track gets no subtitle or fullscreen entries.</p>
             </div>
@@ -199,9 +199,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="audiobooks">
             <div class="text">
-              <h3>Audiobooks that remember your place</h3>
+              <h3><a class="self" href="#audiobooks">Audiobooks that remember your place</a></h3>
               <p><code>.m4b</code> files, files tagged Audiobook and folders you mark get Back and Forward skip buttons (15 s / 30 s, adjustable), previous and next chapter, a chapter list and bookmarks.</p>
               <p>The seek bar and progress percentage span the whole book, even across many files. Playing a book again continues where you stopped, and finished books get a check mark.</p>
               <p>Listen faster or slower, from 0.5× to 3×, with the voice at its normal pitch and no ffmpeg needed. Each book remembers its own speed.</p>
@@ -213,9 +213,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="video">
             <div class="text">
-              <h3>Video with subtitles</h3>
+              <h3><a class="self" href="#video">Video with subtitles</a></h3>
               <p>Video with sound, fullscreen (F) that fills the whole screen, frame-by-frame stepping while paused, 0.5× to 3× speed with the pitch kept, and a choice of audio track. Each video in a folder, such as a series of episodes, resumes where you stopped it. YouTube-style keys work throughout: Space or K, J and L, arrows, 0–9.</p>
               <p>Subtitle files next to the video, such as <code>movie.en.srt</code>, are found automatically. Embedded tracks, SRT, WebVTT and ASS/SSA work as well; G and H shift the timing in 0.1 s steps. DVD images (<code>.iso</code>), <code>.VOB</code> and Blu-ray or camcorder <code>.m2ts</code> files play directly.</p>
               <p>Video is decoded on the graphics card where possible (VA-API on Linux, Direct3D 11 on Windows, VideoToolbox on macOS), falling back to software without interruption. Interlaced DVDs and TV recordings are deinterlaced automatically, and videos filmed upright on a phone play upright.</p>
@@ -227,9 +227,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="subtitles">
             <div class="text">
-              <h3>Subtitles you can read</h3>
+              <h3><a class="self" href="#subtitles">Subtitles you can read</a></h3>
               <p>Preferences ▸ Media sets the size, position, font, colours, a background box, outline or shadow, and spacing, the same for every subtitle format.</p>
               <p>Presets such as High contrast and Yellow on black are one click away, and a live preview shows the contrast ratio with a warning when text would be hard to read. Picture-based subtitles from DVDs (VobSub) and Blu-ray rips (PGS) show too, following the Size and Distance from bottom settings.</p>
             </div>
@@ -240,9 +240,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="equalizer">
             <div class="text">
-              <h3>Ten-band equalizer</h3>
+              <h3><a class="self" href="#equalizer">Ten-band equalizer</a></h3>
               <p>Built-in and saved presets, with an automatic preamp to avoid clipping. The equalizer stays open in its own window while you try presets.</p>
               <p>Also in the Options menu: an A-B loop to repeat part of a track, and a sleep timer that fades out before pausing.</p>
             </div>
@@ -260,7 +260,7 @@
 
     <section id="ai">
       <div class="wrap">
-        <h2>A terminal beside your files, for AI coding agents too</h2>
+        <h2><a class="self" href="#ai">A terminal beside your files, for AI coding agents too</a></h2>
         <p class="sub">A terminal is just another pane. Run a terminal coding agent such as <a href="https://opencode.ai">opencode</a> in one pane, keep your project in a Files pane, and review what changed in a Preview pane.</p>
         <div class="feature">
           <div class="text">
@@ -281,7 +281,7 @@
 
     <section id="remote" class="alt">
       <div class="wrap">
-        <h2>SFTP, SMB and network panes</h2>
+        <h2><a class="self" href="#remote">SFTP, SMB and network panes</a></h2>
         <p class="sub">Point any pane at <code>sftp://user@host/…</code> or <code>smb://server/share</code>. Remote folders behave like local ones: split, drag &amp; drop, copy and move as background jobs.</p>
         <div class="pair">
           <figure><picture>
@@ -308,7 +308,7 @@
       <div class="wrap">
         <div class="feature">
           <div class="text">
-            <h2>Synchronize folders</h2>
+            <h2><a class="self" href="#sync">Synchronize folders</a></h2>
             <p>File ▸ Synchronize Folders compares the folder you highlighted with another one, local, on a network share or on an SFTP server, and lists every copy and delete in a folder tree before anything changes.</p>
             <p>Update copies new and changed files, Mirror makes an exact copy, Two-way merges both ways and leaves conflicts to you. A guided setup asks a few questions; the Advanced view has every option on one page. Save a sync to run it again, or keep the folders in sync while the app is open. New in 0.3.0.</p>
             <p><a href="sync.html">More about Synchronize Folders</a></p>
@@ -325,7 +325,7 @@
 
     <section id="accents" class="alt">
       <div class="wrap">
-        <h2>Make it yours</h2>
+        <h2><a class="self" href="#accents">Make it yours</a></h2>
         <p class="sub">Light or dark, with an accent colour of your choice: pick one of the presets in Preferences &#9656; Appearance, or enter a custom #rrggbb value. Default restores the theme colour.</p>
         <div class="pair trio">
           <figure><picture>

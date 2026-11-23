@@ -228,3 +228,21 @@ section.alt .faq details { background: var(--bg); }
 .faq details p { margin: 0 0 .8rem; color: var(--muted); }
 .grid.spaced { margin-top: 2.5rem; }
 .feature.spaced { margin-top: 2.5rem; }
+
+/* Linkable headings: every feature has a stable anchor (features.html#pdf, sync.html#mirror, …) to share.
+   The heading links to itself, and a "#" shows on hover or keyboard focus. */
+a.self { color: inherit; text-decoration: none; }
+a.self::after { content: "#"; margin-left: .35em; color: var(--muted); font-weight: 400; opacity: 0; }
+a.self:hover::after, a.self:focus-visible::after { opacity: 1; }
+a.self:hover { text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: .2em; }
+.feature[id], .card[id] { scroll-margin-top: 5.5rem; }
+.feature:target, .card:target { outline: 2px solid var(--accent); outline-offset: .75rem; border-radius: var(--radius); }
+.card:target { outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .feature:target, .card:target { animation: target-fade 2.5s ease-out 1s forwards; }
+}
+@keyframes target-fade { to { outline-color: transparent; } }
+@media (max-width: 600px) {
+  .feature[id], .card[id] { scroll-margin-top: 1rem; }
+  .feature:target, .card:target { outline-offset: .35rem; }
+}

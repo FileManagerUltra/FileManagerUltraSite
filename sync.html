@@ -78,12 +78,12 @@
 
     <section id="guided" class="alt">
       <div class="wrap">
-        <h2>A guided setup that asks plain questions</h2>
+        <h2><a class="self" href="#guided">A guided setup that asks plain questions</a></h2>
         <p class="sub">Highlight a folder and choose File ▸ Synchronize Folders. A new sync starts with a few questions, one per screen, and every button says what it does.</p>
         <div class="showcase">
-          <div class="feature">
+          <div class="feature" id="questions">
             <div class="text">
-              <h3>Six questions, then a review</h3>
+              <h3><a class="self" href="#questions">Six questions, then a review</a></h3>
               <p><strong>Folders:</strong> the folder you highlighted is filled in; pick the other one with Browse…, which lists your places, bookmarks, drives, the network and saved servers. A swap button turns the direction round.</p>
               <p><strong>Goal</strong>, <strong>Deleting</strong>, <strong>Compare by</strong>, <strong>Leave out</strong> and <strong>Keep in sync</strong> follow, each with the recommended choice already selected and a sentence explaining every option.</p>
               <p>The last step compares the folders and shows the list of changes, with the note that nothing has been changed yet. Name and save the sync there to run it again later.</p>
@@ -95,9 +95,9 @@
               </picture>
             </figure>
           </div>
-          <div class="feature">
+          <div class="feature" id="advanced">
             <div class="text">
-              <h3>Or every option on one page</h3>
+              <h3><a class="self" href="#advanced">Or every option on one page</a></h3>
               <p>The Advanced view shows the same choices in the same order on a single page: folders, goal, deleting, compare by, leave out and keep in sync. Switch between the two views at any time; a change in one shows in the other.</p>
               <p>After a comparison the settings fold into one line, so the list of changes gets the room. Saved syncs open here, from the <em>Open saved</em> button.</p>
             </div>
@@ -114,16 +114,16 @@
 
     <section id="modes">
       <div class="wrap">
-        <h2>Update, Mirror or Two-way</h2>
+        <h2><a class="self" href="#modes">Update, Mirror or Two-way</a></h2>
         <p class="sub">Pick what the sync should do. For Update and Mirror you also choose the direction: left to right, or right to left.</p>
         <div class="grid">
-          <div class="card"><h3>Update: copy new and changed files</h3><p>Files that are new or newer in the source are copied to the target. Nothing is ever deleted, and a file that is newer in the target is not overwritten. The safe choice for a backup that only grows.</p></div>
-          <div class="card"><h3>Mirror: make the target an exact copy</h3><p>The target ends up identical to the source: new and changed files are copied, and files that are no longer in the source are removed from the target. On a local target they go to the trash by default.</p></div>
-          <div class="card"><h3>Two-way: merge both ways</h3><p>New, changed and deleted files go in both directions, so two copies of a project stay the same wherever you work. A file changed on both sides is a conflict: it is skipped until you pick which copy wins. The very first two-way run only merges and never deletes.</p></div>
+          <div class="card" id="update"><h3><a class="self" href="#update">Update: copy new and changed files</a></h3><p>Files that are new or newer in the source are copied to the target. Nothing is ever deleted, and a file that is newer in the target is not overwritten. The safe choice for a backup that only grows.</p></div>
+          <div class="card" id="mirror"><h3><a class="self" href="#mirror">Mirror: make the target an exact copy</a></h3><p>The target ends up identical to the source: new and changed files are copied, and files that are no longer in the source are removed from the target. On a local target they go to the trash by default.</p></div>
+          <div class="card" id="two-way"><h3><a class="self" href="#two-way">Two-way: merge both ways</a></h3><p>New, changed and deleted files go in both directions, so two copies of a project stay the same wherever you work. A file changed on both sides is a conflict: it is skipped until you pick which copy wins. The very first two-way run only merges and never deletes.</p></div>
         </div>
-        <div class="feature spaced">
+        <div class="feature spaced" id="conflicts">
           <div class="text">
-            <h3>Conflicts are yours to decide</h3>
+            <h3><a class="self" href="#conflicts">Conflicts are yours to decide</a></h3>
             <p>When a file changed in both folders, Two-way does not guess. The file is skipped and counted as a conflict, and it is reported again at every compare until you choose: copy it to the right, copy it to the left, or leave it alone.</p>
             <p>The Conflicts filter lists only those files, with both sizes and dates side by side, so you can see which copy is newer before you pick.</p>
           </div>
@@ -139,7 +139,7 @@
 
     <section id="review" class="alt">
       <div class="wrap">
-        <h2>Review the changes, item by item</h2>
+        <h2><a class="self" href="#review">Review the changes, item by item</a></h2>
         <p class="sub">The comparison is a folder tree with the left file, what will happen, and the right file side by side.</p>
         <div class="showcase">
           <div class="feature">
@@ -164,7 +164,7 @@
       <div class="wrap">
         <div class="feature">
           <div class="text">
-            <h2>Keep in sync while you work</h2>
+            <h2><a class="self" href="#keep">Keep in sync while you work</a></h2>
             <p>Turn on <em>Keep in sync</em> and the first run works as usual: compare, confirm what will be applied, start. After that the app keeps an eye on both folders while it is open. Local folders are watched for changes and remote ones are checked at an interval; new changes are compared and applied for you.</p>
             <p>Only safe changes are applied automatically. Conflicts, permanent deletes and large deletes stop and wait for your review.</p>
             <p>Minimize the window to the Activity panel and keep browsing, during a one-time sync too. The status bar shows what the sync is doing, the Activity panel shows the amount done, speed, elapsed and remaining time, and Stop is one click away. There is no background service: syncing stops when you quit the app, and quitting while a sync is still running asks first.</p>
@@ -181,7 +181,7 @@
 
     <section id="safety" class="alt">
       <div class="wrap">
-        <h2>Built not to lose your files</h2>
+        <h2><a class="self" href="#safety">Built not to lose your files</a></h2>
         <p class="sub">A sync tool deletes files for a living, so FileManagerUltra is careful about it.</p>
         <div class="grid">
           <div class="card"><h3>Nothing changes until Start</h3><p>Comparing only reads folder listings. Files are copied or deleted only after you have seen the list and pressed Start or Synchronize.</p></div>
@@ -196,7 +196,7 @@
 
     <section id="faq">
       <div class="wrap">
-        <h2>Questions</h2>
+        <h2><a class="self" href="#faq">Questions</a></h2>
         <div class="faq">
           <details>
             <summary>Can I sync with an SFTP server or a network share?</summary>
@@ -232,7 +232,7 @@
 
     <section id="get" class="alt">
       <div class="wrap center">
-        <h2>Try Synchronize Folders</h2>
+        <h2><a class="self" href="#get">Try Synchronize Folders</a></h2>
         <p class="sub">Download FileManagerUltra 0.3.2 for Windows, macOS or Linux from the GitHub Releases page, highlight a folder and choose File ▸ Synchronize Folders.</p>
         <div class="cta">
           <a class="btn" href="https://github.com/FileManagerUltra/FileManagerUltra/releases">Download</a>
