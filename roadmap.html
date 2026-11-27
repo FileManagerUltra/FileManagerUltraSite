@@ -39,7 +39,7 @@
       <div class="wrap">
         <h1>Roadmap</h1>
         <p class="sub">Where FileManagerUltra is heading. These are plans, not promises: order and scope can change, and there are no dates. Ideas and bug reports are welcome as <a href="https://github.com/FileManagerUltra/FileManagerUltra/issues">GitHub issues</a>.</p>
-        <p class="updated">Last updated <time datetime="2026-11-23">23 November 2026</time>, after release 0.3.2.</p>
+        <p class="updated">Last updated <time datetime="2026-11-27">27 November 2026</time>, after release 0.4.0.</p>
         <nav class="subnav" aria-label="On this page">
           <a href="#now">Now</a>
           <a href="#next">Next</a>
@@ -51,11 +51,11 @@
 
     <section id="now">
       <div class="wrap">
-        <h2>Now: making the 0.3 beta solid</h2>
-        <p class="sub">0.3.0 brought <a href="sync.html">Synchronize Folders</a> and a signed, notarized macOS download; 0.3.1 and 0.3.2 added <a href="features.html#pdf">PDF Fill &amp; Sign</a> and a <a href="features.html#csv">CSV/TSV table view</a>. Next up is making it solid on every platform.</p>
+        <h2>Now: RTF documents, then disk images and Docker</h2>
+        <p class="sub">0.4.0 brought <a href="features.html#archives">archives that open like folders</a> and a <a href="features.html#editor">built-in text editor</a>. Next up is reading RTF documents in the Preview pane, then more things that open like folders.</p>
         <div class="grid">
-          <div class="card"><h3>Windows and macOS checks</h3><p>Hands-on testing of live folder refresh (including mapped network drives), USB and VeraCrypt devices, and on Windows the ffmpeg download and the installed shortcut icon.</p></div>
-          <div class="card"><h3>Folder sync follow-ups</h3><p>Hands-on checks of Synchronize Folders on SFTP, SMB and Windows, a keyboard shortcut, and more ways to settle conflicts.</p></div>
+          <div class="card"><h3>RTF previews</h3><p>Rich Text Format documents shown like Markdown in the Preview pane, with their tables, pictures and accented letters from older code pages.</p></div>
+          <div class="card"><h3>Windows and macOS checks</h3><p>The last open hands-on checks: a smoke test on macOS and the installed Windows shortcut icon.</p></div>
           <div class="card"><h3>Signed Windows installers</h3><p>The macOS download is signed and notarized since 0.3.0. Code signing for the Windows installer is prepared, so SmartScreen stops warning on first start. <a href="https://github.com/sponsors/FileManagerUltra">Sponsoring</a> helps pay for signing.</p></div>
           <div class="card"><h3>Fixes for what you report</h3><p>Bugs reported by early users come first. <a href="https://github.com/FileManagerUltra/FileManagerUltra/issues">Report an issue</a>.</p></div>
         </div>
@@ -67,10 +67,11 @@
         <h2>Next</h2>
         <p class="sub">The features planned after that.</p>
         <div class="grid">
+          <div class="card"><h3>Disk images and Docker as folders</h3><p>Read-only SquashFS, ext2/3/4, FAT, NTFS, JFFS2 and CramFS images with their partitions, &ldquo;Open as archive or image&hellip;&rdquo; to find archives inside any file, and local Docker or Podman containers, images and volumes, all browsed like folders.</p></div>
+          <div class="card"><h3>Select with a rectangle</h3><p>Drag a rectangle over empty space in a Files pane to select the items it touches.</p></div>
           <div class="card"><h3>File permissions</h3><p>View and change permissions and ownership (<code>chmod</code>/<code>chown</code> on Linux and macOS, basic ACLs on Windows), recursively if you like, with a clear explanation when a change is denied. Works on SFTP where the server allows it.</p></div>
-          <div class="card"><h3>Text and Markdown editor</h3><p>Edit in a pane with save, undo/redo, find and replace, syntax highlighting and a live Markdown preview. Saving never loses data on failure, and you are warned when the file changed on disk. Works on remote files too.</p></div>
           <div class="card"><h3>Better search</h3><p>Building on Find Files: regular expressions, include and exclude filters, results that open at the matching line, and search and replace across files.</p></div>
-          <div class="card"><h3>Diagram previews</h3><p>Previews for draw.io and Dia diagram files. PDFs and CSV/TSV tables already open in the Preview pane since 0.3.1 and 0.3.2.</p></div>
+          <div class="card"><h3>More viewers</h3><p>Previews for draw.io and Dia diagram files, and an e-book view for EPUB, MOBI and CHM books.</p></div>
           <div class="card"><h3>Feature walkthrough</h3><p>A quick tour with balloons that shows off several features using built-in example files, so it never changes any of your own files.</p></div>
         </div>
       </div>
@@ -82,7 +83,6 @@
         <p class="sub">Wanted, but not scheduled yet.</p>
         <div class="grid">
           <div class="card"><h3>Batch rename</h3><p>Rename many files at once with numbering, text replacement and case changes, a before/after preview, and safe handling of collisions and swaps.</p></div>
-          <div class="card"><h3>Archives</h3><p>Browse zip and tar archives as folders and extract from them.</p></div>
           <div class="card"><h3>Restore layout: yes, no or ask</h3><p>Choose whether the previous pane layout comes back at startup, or have the app ask each time.</p></div>
           <div class="card"><h3>Automation</h3><p>A command line and control channel on top of the app's command registry, so scripts and tools can drive it.</p></div>
           <div class="card"><h3>Plugins</h3><p>Extend the file manager with your own additions.</p></div>

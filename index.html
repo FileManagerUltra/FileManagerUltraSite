@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FileManagerUltra – a multi-pane file manager written in Rust</title>
-  <meta name="description" content="FileManagerUltra is a free, open-source multi-pane file manager for Linux, macOS and Windows, written in Rust: split panes, SMB and SFTP, folder sync, terminal panes, a media player, rich previews and Git status.">
+  <meta name="description" content="FileManagerUltra is a free, open-source multi-pane file manager for Linux, macOS and Windows, written in Rust: split panes, SMB and SFTP, archives that open like folders, a built-in text editor, folder sync, terminal panes, a media player, rich previews and Git status.">
   <link rel="canonical" href="https://filemanagerultra.com/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="FileManagerUltra">
   <meta property="og:title" content="FileManagerUltra – a multi-pane file manager written in Rust">
-  <meta property="og:description" content="Free, open-source file manager for Linux, macOS and Windows: unlimited split panes, SMB and SFTP, folder sync, terminals, media and previews.">
+  <meta property="og:description" content="Free, open-source file manager for Linux, macOS and Windows: unlimited split panes, SMB and SFTP, archives as folders, a text editor, folder sync, terminals, media and previews.">
   <meta property="og:url" content="https://filemanagerultra.com/">
   <meta property="og:image" content="https://filemanagerultra.com/assets/screens/hero-dark.webp">
   <meta name="twitter:card" content="summary_large_image">
@@ -20,13 +20,13 @@
     "name": "FileManagerUltra",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Linux, macOS, Windows",
-    "softwareVersion": "0.3.2",
+    "softwareVersion": "0.4.0",
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "url": "https://filemanagerultra.com/",
     "downloadUrl": "https://github.com/FileManagerUltra/FileManagerUltra/releases",
     "screenshot": "https://filemanagerultra.com/assets/screens/hero-dark.webp",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": "A cross-platform multi-pane file manager written in Rust with a native UI: unlimited split panes, local, SMB and SFTP folders, folder synchronization, terminal panes, a media player, rich previews and Git status."
+    "description": "A cross-platform multi-pane file manager written in Rust with a native UI: unlimited split panes, local, SMB and SFTP folders, archives that open like folders, a built-in text editor, folder synchronization, terminal panes, a media player, rich previews and Git status."
   }
   </script>
   <meta name="color-scheme" content="light dark">
@@ -71,6 +71,7 @@
     <section class="hero" id="top">
       <div class="wrap">
         <span class="badge">Beta · Apache 2.0 licensed</span>
+        <a class="badge new" href="#archives-teaser">New in 0.4.0: archives open like folders, and a text editor</a>
         <h1>A file manager with as many panes as you need.</h1>
         <p class="lead">FileManagerUltra is a cross-platform (Linux, macOS, Windows) multi-pane file manager written in Rust, with a native UI. No Electron, no webview.</p>
         <div class="cta">
@@ -84,6 +85,46 @@
             <img src="assets/screens/hero-light.webp" width="1440" height="900" alt="FileManagerUltra with two file panes stacked on the left, Downloads above Documents, and a rendered Markdown trip plan in a Preview pane on the right.">
           </picture>
         </figure>
+      </div>
+    </section>
+
+    <section id="archives-teaser" class="alt">
+      <div class="wrap">
+        <div class="feature">
+          <div class="text">
+            <p class="eyebrow">New in 0.4.0</p>
+            <h2><a class="self" href="#archives-teaser">Archives open like folders</a></h2>
+            <p>Press Enter on a zip, tar, 7z, RAR or ISO file and browse it like any other folder: preview what is inside, copy files out, open archives inside archives, also on a network share or an SFTP server. Encrypted archives ask for their password, and split sets such as <code>backup.7z.001</code> open as one.</p>
+            <p>Zip, tar and 7z archives can be changed too: copy files in, rename and delete, then Save or Discard. Extract Here, Add to <em>name</em>.zip and Compress To&hellip;, with AES-256 passwords and parts, are in the right-click menu and run as background jobs.</p>
+            <p><a href="features.html#archives">More about archives</a></p>
+          </div>
+          <figure class="shot">
+            <picture>
+              <source srcset="assets/screens/archive-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="assets/screens/archive-light.webp" width="1440" height="900" loading="lazy" alt="A Files pane inside archive-2025.zip in the Documents folder: the archive appears in the folder tree as a folder with Letters, Photos and Receipts below it, all in the archive colour. The Preview pane beside it renders Year in review.md from inside the zip, with a highlights list and a spending table.">
+            </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="editor-teaser">
+      <div class="wrap">
+        <div class="feature">
+          <div class="text">
+            <p class="eyebrow">New in 0.4.0</p>
+            <h2><a class="self" href="#editor-teaser">Edit text right in the Preview pane</a></h2>
+            <p>Press F4 or double-click a text file and the preview becomes an editor: syntax colouring for many languages, find and replace with regular expressions, code folding, bracket colours, and smooth scrolling in files up to 1 GB, local or remote.</p>
+            <p>Edits save when you leave the editor, and a file another program changed is never overwritten without asking. The Live button opens a second Preview pane that renders your Markdown, HTML or SVG as you type.</p>
+            <p><a href="features.html#editor">More about the editor</a></p>
+          </div>
+          <figure class="shot">
+            <picture>
+              <source srcset="assets/screens/editor-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="assets/screens/editor-light.webp" width="1440" height="900" loading="lazy" alt="The Preview pane editing routes.rs, framed in orange with an orange Editing badge: line numbers, Rust syntax colouring, three folded blocks showing four lines each, and the find bar searching for Response with 13 matches highlighted.">
+            </picture>
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -109,6 +150,8 @@
         <div class="grid">
           <div class="card"><h3>Unlimited split panes</h3><p>Split right or down as often as you like. Each pane has its own file tree, file listing and zoom, and Files panes have Back and Forward (the mouse buttons work too).</p></div>
           <div class="card"><h3>Local, SMB and SFTP</h3><p>Local drives, mounted shares, in-app SMB and SSH/SFTP all behind one virtual filesystem, so every pane feature works across them. <a href="features.html#remote">See remote panes</a></p></div>
+          <div class="card"><h3>Archives as folders</h3><p>Zip, tar, 7z, RAR and ISO files open like folders, also remote and nested. Change zip, tar and 7z archives and Save; extract and compress from the right-click menu. <a href="features.html#archives">See archives</a></p></div>
+          <div class="card"><h3>Built-in text editor</h3><p>F4 turns the preview into an editor with syntax colouring, find and replace, folding and a live Markdown preview, for local and remote files. <a href="features.html#editor">See the editor</a></p></div>
           <div class="card"><h3>Drag &amp; drop</h3><p>Drop onto a tree node or the listing; hold Ctrl to copy, Shift to move. On Linux and Windows, drag files out into a browser upload field, mail or chat window.</p></div>
           <div class="card"><h3>Background jobs</h3><p>File operations run as jobs with progress, conflict handling and cancel, so the UI never blocks. Jobs, messages and tips gather in the Activity panel.</p></div>
           <div class="card"><h3>Folder sync</h3><p>Compare two folders, local or remote, review every copy and delete, then Update, Mirror or Two-way sync. Keep them in sync while the app is open. <a href="sync.html">See Synchronize Folders</a></p></div>

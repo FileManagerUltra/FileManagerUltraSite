@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Features – FileManagerUltra</title>
-  <meta name="description" content="What FileManagerUltra does: previews and Git diffs, PDF Fill &amp; Sign, CSV tables, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, folder sync and themes.">
+  <meta name="description" content="What FileManagerUltra does: archives that open like folders, a built-in text editor, previews and Git diffs, PDF Fill &amp; Sign, CSV tables, a Media pane with audiobooks, subtitles and an equalizer, terminal panes for AI agents, SFTP and SMB, folder sync and themes.">
   <link rel="canonical" href="https://filemanagerultra.com/features.html">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -41,6 +41,8 @@
         <h1>Features</h1>
         <p class="sub">Screenshots come straight from the app. Most match the page theme, and a few show the other one, so you see both. The Auto / Light / Dark switch at the top changes the page and its screenshots; click any screenshot to enlarge it.</p>
         <nav class="subnav" aria-label="On this page">
+          <a href="#archives">Archives</a>
+          <a href="#editor">Editor</a>
           <a href="#previews">Previews &amp; Git</a>
           <a href="#pdf">PDF &amp; CSV</a>
           <a href="#media">Media</a>
@@ -49,6 +51,91 @@
           <a href="#sync">Folder sync</a>
           <a href="#accents">Themes</a>
         </nav>
+      </div>
+    </section>
+
+    <section id="archives">
+      <div class="wrap">
+        <h2><a class="self" href="#archives">Archives that open like folders</a></h2>
+        <p class="sub">Zip, tar (gz, bz2, xz, zst), 7z, RAR and ISO files open in any pane like a folder, local or remote, and zip, tar and 7z archives can be changed and saved. New in 0.4.0.</p>
+        <div class="showcase">
+          <div class="feature" id="browse-archives">
+            <div class="text">
+              <h3><a class="self" href="#browse-archives">Press Enter to look inside</a></h3>
+              <p>Enter or a double-click opens a zip, tar, tar.gz, tar.bz2, tar.xz, tar.zst, 7z or ISO file; Backspace leaves it with the cursor on the archive. Preview files inside, copy them out, and open archives inside archives, also on a network share or an SFTP server.</p>
+              <p>Archives and everything in them are shown in a shade of your accent colour, and opened archives join the folder tree. Type or paste a path through an archive, such as <code>/home/me/site.zip/www</code>, into the address bar, and bookmarks, tabs and workspaces that point inside an archive open there again after a restart.</p>
+              <p>Selecting an archive with a Preview pane open shows what it holds without opening it: format, compression, number of files, packed and unpacked size, encryption and the top-level entries.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/archive-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/archive-light.webp" width="1440" height="900" loading="lazy" alt="A Files pane inside archive-2025.zip in the Documents folder: the archive appears in the folder tree as a folder with Letters, Photos and Receipts below it, all in the archive colour. The Preview pane beside it renders Year in review.md from inside the zip, with a highlights list and a spending table.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature" id="change-archives">
+            <div class="text">
+              <h3><a class="self" href="#change-archives">Change an archive, then Save</a></h3>
+              <p>Copy or move files into a zip, tar or 7z archive, make folders, rename and delete, just like in a folder. Nothing is written until you press Save in the bar above the listing; Discard drops the changes, and Save as copy&hellip; writes the changed archive somewhere else.</p>
+              <p>Saving leaves the original untouched until the new archive has been written and checked, refuses to overwrite an archive another program changed meanwhile, and keeps encrypted archives encrypted. An archive with unsaved changes stays marked in orange with a dot when you go back to its folder, and quitting lists it with everything else that is unsaved.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/archive-changes-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/archive-changes-dark.webp" width="1440" height="900" loading="lazy" alt="Two Files panes: Pictures on the left with glacier.jpg, harbour.jpg and lighthouse.jpg selected, and the Photos folder inside archive-2025.zip on the right, where the three pictures have been copied in. Above the archive listing a bar reads: archive-2025.zip has 3 unsaved changes, with the buttons Save, Save as copy and Discard.">
+              </picture>
+            </figure>
+          </div>
+        </div>
+        <div class="grid more-cards">
+          <div class="card" id="extract-compress"><h3><a class="self" href="#extract-compress">Extract and compress</a></h3><p>Extract Here puts an archive's contents in a new folder named after it, Extract To&hellip; lets you pick one. On any selection, Add to <em>name</em>.zip and Add to <em>name</em>.7z work in one click, and Compress To&hellip; chooses zip, 7z, tar.gz, tar.xz, tar.bz2 or tar, the level, a password and parts. Drop files on an archive to add them. All of it runs as background jobs with progress and Cancel.</p></div>
+          <div class="card" id="archive-passwords"><h3><a class="self" href="#archive-passwords">Passwords</a></h3><p>Encrypted zip, 7z and RAR archives ask for their password in the pane, and encrypted files inside show a padlock. A password is kept only while the archive is open. Set Password&hellip; adds, changes or removes one on save: AES-256 for zip and 7z, and 7z can hide the file names too.</p></div>
+          <div class="card" id="split-archives"><h3><a class="self" href="#split-archives">Split archives</a></h3><p>Press Enter on any part of <code>backup.7z.001</code>, <code>.002</code>, &hellip; or a <code>site.z01</code> set and see the whole archive; a missing part is named. Numbered sets can be changed and saved, keeping the original part size. Join Parts writes one archive next to them.</p></div>
+          <div class="card" id="rar-iso"><h3><a class="self" href="#rar-iso">RAR and disc images</a></h3><p>RAR archives, also split into volumes, open like folders when 7-Zip or unrar is installed; without one the pane says what to install. ISO disc images open with their long names, without mounting anything. Both are read-only, and the menus say why.</p></div>
+          <div class="card" id="archive-safety"><h3><a class="self" href="#archive-safety">Safe with hostile archives</a></h3><p>Extracting never writes outside the new folder: <code>..</code> paths, absolute paths and links stay contained, device files are left out and setuid bits are dropped. An archive that would unpack to over 1,000 times its size asks before it fills your disk.</p></div>
+          <div class="card" id="archive-speed"><h3><a class="self" href="#archive-speed">Big archives stay quick</a></h3><p>Large compressed tars and RAR sets list what has been read so far while they open, and reading many files from a big <code>.tar.gz</code> unpacks it once to a private temporary copy, within a limit you set in Preferences. Add comic books (<code>.cbz</code>) or e-books (<code>.epub</code>) in Preferences ▸ Files to open them as archives too.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="editor" class="alt">
+      <div class="wrap">
+        <h2><a class="self" href="#editor">A text editor in the Preview pane</a></h2>
+        <p class="sub">Press F4 or double-click a text file and the preview becomes an editor; F4 again switches back. New in 0.4.0.</p>
+        <div class="showcase">
+          <div class="feature" id="edit">
+            <div class="text">
+              <h3><a class="self" href="#edit">Edit where you were reading</a></h3>
+              <p>Line numbers, syntax colouring for Rust, Python, JavaScript and TypeScript, C and C++, Go, Java, PHP, SQL, shell, HTML/CSS, XML, Markdown, JSON, YAML and TOML, find and replace with regular expressions, Go to Line (Ctrl+G), undo and redo, auto-indent, Ctrl+/ to comment lines and Alt+Up/Down to move them.</p>
+              <p>Fold code with the arrows next to the line numbers or Ctrl+Shift+[ and ], and brackets are coloured by depth, with an unmatched one in red. An orange frame and an &ldquo;Editing&rdquo; badge show that you are editing, not viewing.</p>
+              <p>Files up to 1 GB open and scroll smoothly, files on SFTP and network shares work like local ones, and the encoding and line endings are kept when you save.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/editor-dark.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/editor-light.webp" width="1440" height="900" loading="lazy" alt="The Preview pane editing routes.rs, framed in orange with an orange Editing badge: line numbers, Rust syntax colouring, three folded blocks showing four lines each, and the find bar searching for Response with 13 matches highlighted.">
+              </picture>
+            </figure>
+          </div>
+          <div class="feature" id="live-preview">
+            <div class="text">
+              <h3><a class="self" href="#live-preview">Live preview while you type</a></h3>
+              <p>The editor's Live button opens a second Preview pane that shows your unsaved text rendered a moment after you stop typing: Markdown, HTML, SVG, Mermaid diagrams, tables and more, without saving the file.</p>
+              <p>Code in the Preview pane and in the editor uses the same colours, so a file looks the same when you start editing it.</p>
+            </div>
+            <figure class="shot">
+              <picture>
+                <source srcset="assets/screens/editor-live-light.webp" media="(prefers-color-scheme: dark)">
+                <img src="assets/screens/editor-live-dark.webp" width="1440" height="900" loading="lazy" alt="Three panes: the Documents folder, README.md open in the editor with two new checklist lines and a dot for unsaved edits, and a Live preview pane on the right that already renders the trip plan with the new Husavik and Whale-watching tour items.">
+              </picture>
+            </figure>
+          </div>
+        </div>
+        <div class="grid more-cards">
+          <div class="card" id="editor-saving"><h3><a class="self" href="#editor-saving">Saving that never surprises you</a></h3><p>Edits save by themselves when you leave the editor: click another pane, switch application, open another file or close the pane. Prefer to be asked? Turn that off in Preferences ▸ Editor. A file another program changed is never overwritten without asking: Reload, Overwrite or Save As.</p></div>
+          <div class="card" id="editor-schemes"><h3><a class="self" href="#editor-schemes">Colour schemes</a></h3><p>App colours, Warm, and High contrast with at least 7:1 for every colour, each in a dark and a light version that follow the app's theme. Line spacing is adjustable from 100 to 200&nbsp;%.</p></div>
+          <div class="card" id="editor-choice"><h3><a class="self" href="#editor-choice">Built-in or your own editor</a></h3><p>Preferences ▸ Editor chooses per kind of file (text, code, markup, settings, logs) whether it opens in the built-in editor or your external one. Open in External Editor is always in the right-click menu and the editor's toolbar.</p></div>
+        </div>
       </div>
     </section>
 

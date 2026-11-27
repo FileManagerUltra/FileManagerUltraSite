@@ -4,13 +4,16 @@
 Usage: make_demo_data.py <target-dir>   (the directory is wiped and recreated)
 Needs Pillow and ffmpeg (libmp3lame, libx264) for the playable demo media.
 """
+import io
 import math
 import os
 import random
 import shutil
 import subprocess
 import sys
+import tarfile
 import time
+import zipfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -249,7 +252,86 @@ def orders_csv():
 
 
 put("Documents/orders-2026.csv", orders_csv(), 1)
-put("Documents/archive-2025.zip", bytes(rng.getrandbits(8) for _ in range(250000)), 200)
+# The old placeholder zip was 250,000 of these random bytes; drawing them keeps the rest unchanged.
+for _ in range(250000):
+    rng.getrandbits(8)
+
+
+def make_archive(path, entries, days_ago):
+    """Write a real zip or tar.gz; its entries are dated an hour before the archive file."""
+    p = home / path
+    p.parent.mkdir(parents=True, exist_ok=True)
+    stamp_t = time.localtime(NOW - days_ago * 86400 - 3600)
+    if p.suffix == ".zip":
+        with zipfile.ZipFile(p, "w", zipfile.ZIP_DEFLATED) as z:
+            for name, data in entries:
+                info = zipfile.ZipInfo(name, date_time=stamp_t[:6])
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                z.writestr(info, data)
+    else:
+        with tarfile.open(p, "w:gz") as t:
+            for name, data in entries:
+                data = data.encode() if isinstance(data, str) else data
+                info = tarfile.TarInfo(name)
+                info.size, info.mtime, info.mode = len(data), time.mktime(stamp_t), 0o644
+                info.uname = info.gname = "demo"
+                t.addfile(info, io.BytesIO(data))
+    t = NOW - days_ago * 86400
+    os.utime(p, (t, t))
+
+
+def jpeg(seed, size=(1280, 853)):
+    buf = io.BytesIO()
+    art(seed, size).save(buf, "JPEG", quality=85)
+    return buf.getvalue()
+
+
+# Archives open like folders since 0.4.0: a zip of last year's papers and a site backup.
+make_archive("Documents/archive-2025.zip", [
+    ("Year in review.md", """# 2025 in review
+
+A short look back before this folder goes into the archive.
+
+## Highlights
+
+- Moved to the new flat in **March**
+- Two weeks in *Portugal* in June
+- Finished the garden shed
+
+## Spending
+
+| Category  | Total (EUR) |
+|-----------|------------:|
+| Rent      |      13,200 |
+| Groceries |       4,870 |
+| Travel    |       2,310 |
+| Garden    |         640 |
+
+> Keep the receipts until 2032.
+"""),
+    *[(f"Photos/{n}.jpg", jpeg(100 + i)) for i, n in enumerate(
+        ["lisbon-tram", "porto-bridge", "garden-shed", "first-snow", "new-flat", "sintra"])],
+    *[(f"Letters/{n}.txt", f"{n.replace('-', ' ').capitalize()}\n\nDear neighbour,\n\nThank you.\n")
+      for n in ("landlord-deposit", "insurance-claim", "thank-you-neighbours")],
+    *[(f"Receipts/2025-{m:02d} {what}.txt", f"{what}\nAmount: EUR {amt}\nPaid: 2025-{m:02d}-14\n")
+      for m, what, amt in [(2, "Bike repair", "86.50"), (3, "Moving van", "149.00"),
+                           (6, "Train tickets", "212.40"), (9, "Shed timber", "384.95"),
+                           (11, "Winter tyres", "460.00")]],
+], 200)
+make_archive("Downloads/website-backup.tar.gz", [
+    ("www/index.html", "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n"
+     "  <title>Corner Bakery</title>\n  <link rel=\"stylesheet\" href=\"css/site.css\">\n</head>\n<body>\n"
+     "  <h1>Corner Bakery</h1>\n  <p>Fresh bread every morning from seven.</p>\n"
+     "  <img src=\"img/sourdough.jpg\" alt=\"A sourdough loaf\">\n  <script src=\"js/app.js\"></script>\n"
+     "</body>\n</html>\n"),
+    ("www/css/site.css", "body {\n  font-family: system-ui, sans-serif;\n  margin: 0 auto;\n  max-width: 40rem;\n}\n"
+     "h1 {\n  color: #a0522d;\n}\n"),
+    ("www/js/app.js", "document.querySelectorAll('img').forEach((img) => {\n  img.loading = 'lazy';\n});\n"),
+    *[(f"www/img/{n}.jpg", jpeg(130 + i, (960, 640))) for i, n in enumerate(["sourdough", "croissants", "shop-front"])],
+    ("nginx/bakery.conf", "server {\n    listen 80;\n    server_name bakery.example;\n    root /var/www/bakery;\n}\n"),
+    ("README.md", "# Corner Bakery site\n\nBackup of the static site and its nginx config.\n"),
+], 5)
 
 # --- Logs ---------------------------------------------------------------------
 levels = ["INFO"] * 8 + ["WARN"] * 2 + ["ERROR"]
@@ -314,6 +396,83 @@ put("Projects/webshop/README.md", "# webshop\n\nA tiny demo shop.\n\n## Usage\n\
 
 put("Projects/api-server/Cargo.toml", '[package]\nname = "api-server"\nversion = "0.3.2"\n', 30)
 put("Projects/api-server/src/main.rs", "fn main() {\n    println!(\"listening\");\n}\n", 30)
+# A longer source file for the editor screenshots (folding, bracket colours, find).
+put("Projects/api-server/src/routes.rs", """//! HTTP routes for the order API.
+
+use std::collections::HashMap;
+
+/// A request after parsing: method, path and query parameters.
+pub struct Request {
+    pub method: Method,
+    pub path: String,
+    pub query: HashMap<String, String>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Method {
+    Get,
+    Post,
+    Delete,
+}
+
+pub enum Response {
+    Ok(String),
+    NotFound,
+    BadRequest(&'static str),
+}
+
+/// Pick the handler for a request.
+pub fn route(req: &Request) -> Response {
+    let parts: Vec<&str> = req.path.trim_matches('/').split('/').collect();
+    match (req.method, parts.as_slice()) {
+        (Method::Get, ["orders"]) => list_orders(&req.query),
+        (Method::Get, ["orders", id]) => match id.parse::<u32>() {
+            Ok(id) => show_order(id),
+            Err(_) => Response::BadRequest("order id must be a number"),
+        },
+        (Method::Post, ["orders"]) => Response::Ok("created".into()),
+        (Method::Delete, ["orders", _]) => Response::Ok("deleted".into()),
+        _ => Response::NotFound,
+    }
+}
+
+fn list_orders(query: &HashMap<String, String>) -> Response {
+    let limit = query
+        .get("limit")
+        .and_then(|v| v.parse::<usize>().ok())
+        .unwrap_or(50)
+        .min(500);
+    // Newest first; the store keeps them sorted by date.
+    let rows: Vec<String> = (0..limit).map(|i| format!("order-{}", 10421 + i)).collect();
+    Response::Ok(rows.join("\\n"))
+}
+
+fn show_order(id: u32) -> Response {
+    if id < 10421 {
+        return Response::NotFound;
+    }
+    Response::Ok(format!("{{\\"id\\": {id}, \\"status\\": \\"delivered\\"}}"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn get(path: &str) -> Request {
+        Request { method: Method::Get, path: path.into(), query: HashMap::new() }
+    }
+
+    #[test]
+    fn unknown_paths_are_not_found() {
+        assert!(matches!(route(&get("/nope")), Response::NotFound));
+    }
+
+    #[test]
+    fn order_ids_must_be_numbers() {
+        assert!(matches!(route(&get("/orders/abc")), Response::BadRequest(_)));
+    }
+}
+""", 6)
 put("Projects/dotfiles/vimrc", "set number\nsyntax on\n", 100)
 
 # --- Misc ---------------------------------------------------------------------
